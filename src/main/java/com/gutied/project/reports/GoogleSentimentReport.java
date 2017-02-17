@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.gutied.project.mongodb.GoogleLanguageApiDbParser.SentimentCollectionKeys.magnitude;
 import static com.gutied.project.mongodb.GoogleLanguageApiDbParser.SentimentCollectionKeys.score;
+import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.*;
 
 public class GoogleSentimentReport {
 

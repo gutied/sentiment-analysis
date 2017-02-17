@@ -5,6 +5,7 @@ import com.mongodb.*;
 import java.util.List;
 
 import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollection;
+import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.*;
 
 public class MongoDB {
 

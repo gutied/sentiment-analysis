@@ -22,6 +22,9 @@ public class IbmEntitiesReport {
 
     private long[] counters;
 
+    private static final String ALCHEMY_POSITIVE = "POSITIVE";
+    private static final String ALCHEMY_NEGATIVE = "NEGATIVE";
+
     public IbmEntitiesReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
@@ -37,24 +40,30 @@ public class IbmEntitiesReport {
         writeResultsToFile(filename, positiveEntitiesHistogram, negativeEntitiesHistogram);
     }
 
-    private void extractPositiveAndNegativeEntitiesForQuote(SortedMap<String, Long> entitiesHistogram, SortedMap<String, Long> negativeEntitiesHistogram, DBObject reviewData) {
-        BasicDBList allEntities = (BasicDBList) reviewData.get(HotelReviewDbParser.tripAdvisorReviewCollectionKeys.alchemyKeywords.toString());
+    private void extractPositiveAndNegativeEntitiesForQuote(SortedMap<String, Long> entitiesHistogram,
+                                                            SortedMap<String, Long> negativeEntitiesHistogram,
+                                                            DBObject reviewData) {
+        BasicDBList allEntities = (BasicDBList) reviewData.get(HotelReviewDbParser.tripAdvisorReviewCollectionKeys
+                .alchemyKeywords.toString());
         if (allEntities != null && allEntities.size() > 0) {
             DBObject error = (DBObject) reviewData.get(IbmAlchemyApiParser.KeywordCollectionKeys.error.toString());
             if (error == null) {
                 for (Object entitiesList : allEntities) {
                     BasicDBObject entitiesObject = (BasicDBObject) entitiesList;
-                    String entityName = (String) entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys.keyword.toString());
+                    String entityName = (String) entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys.keyword
+                            .toString());
                     if (Strings.isNotEmpty(entityName)) {
                         String[] words = normalizeString(entityName);
                         for (String word : words) {
                             word = word.trim();
                             if (word.length() > 2) {
-                                if ("POSITIVE".equals(entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys.sentiment.toString()))) {
+                                if (ALCHEMY_POSITIVE.equals(entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys
+                                        .sentiment.toString()))) {
                                     Long entityCounter = entitiesHistogram.get(word.trim());
                                     entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
                                     entitiesHistogram.put(word.trim(), entityCounter);
-                                } else  if ("NEGATIVE".equals(entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys.sentiment.toString()))) {
+                                } else if (ALCHEMY_NEGATIVE.equals(entitiesObject.get(IbmAlchemyApiParser
+                                        .KeywordCollectionKeys.sentiment.toString()))) {
                                     Long entityCounter = negativeEntitiesHistogram.get(word.trim());
                                     entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
                                     negativeEntitiesHistogram.put(word.trim(), entityCounter);
@@ -69,21 +78,21 @@ public class IbmEntitiesReport {
 
     private String[] normalizeString(String string) {
         string = string.toLowerCase().trim();
-        string = string.replaceAll(",", " ");
-        string = string.replaceAll("\\.", " ");
-        string = string.replaceAll("-", " ");
-        string = string.replaceAll("/", " ");
-        string = string.replaceAll("!", " ");
-        string = string.replaceAll("\\+", " ");
-        string = string.replaceAll("\\(", " ");
-        string = string.replaceAll("\\)", " ");
-        string = string.replaceAll("\\)", " ");
-        string = string.replaceAll("\\*", " ");
-        string = string.replaceAll("&", " ");
-        string = string.replaceAll("£", " ");
-        string = string.replaceAll("$", " ");
-        string = string.replaceAll("‘", " ");
-        string = string.replaceAll("'", " ");
+//        string = string.replaceAll(",", " ");
+//        string = string.replaceAll("\\.", " ");
+//        string = string.replaceAll("-", " ");
+//        string = string.replaceAll("/", " ");
+//        string = string.replaceAll("!", " ");
+//        string = string.replaceAll("\\+", " ");
+//        string = string.replaceAll("\\(", " ");
+//        string = string.replaceAll("\\)", " ");
+//        string = string.replaceAll("\\)", " ");
+//        string = string.replaceAll("\\*", " ");
+//        string = string.replaceAll("&", " ");
+//        string = string.replaceAll("£", " ");
+//        string = string.replaceAll("$", " ");
+//        string = string.replaceAll("‘", " ");
+//        string = string.replaceAll("'", " ");
         return string.split(" ");
     }
 

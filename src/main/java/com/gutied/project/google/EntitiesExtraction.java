@@ -19,16 +19,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollection;
+import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.googleEntities;
+import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.hotelName;
+import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.review;
 
 /**
- *  Application that reads all the hotel reviews for a given city from the database and invokes Google's
- *  Natural Language Api entity recognition function to analyze the entities in the hotel's review text.
- *
- *  <p>The application stores the results in the database.
- *
- *  <p>In order to work the GOOGLE_APPLICATION_CREDENTIALS environment variable needs to be set pointing to the
- *  json file containing Google's API key.
- *  {@link https://developers.google.com/identity/protocols/application-default-credentials}
+ * Application that reads all the hotel reviews for a given city from the database and invokes Google's
+ * Natural Language Api entity recognition function to analyze the entities in the hotel's review text.
+ * <p>
+ * <p>The application stores the results in the database.
+ * <p>
+ * <p>In order to work the GOOGLE_APPLICATION_CREDENTIALS environment variable needs to be set pointing to the
+ * json file containing Google's API key.
+ * {@see <a href="https://developers.google.com/identity/protocols/application-default-credentials">Google API
+ * credentials</a>}
  */
 public class EntitiesExtraction {
 
@@ -46,10 +50,9 @@ public class EntitiesExtraction {
      * {@code findAndSaveEntitiesForAllReviewsInCity} finds all TripAdvisor reviews in the db, invokes an entity
      * extraction function for the review and stores the result in the db.
      *
-     * @param  city The city for which reviews analyze.
-     *
+     * @param city The city for which reviews analyze.
      */
-     private void findAndSaveEntitiesForAllReviewsInCity(String city) {
+    private void findAndSaveEntitiesForAllReviewsInCity(String city) {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
         DBObject query = new BasicDBObject(googleEntities.toString(), new BasicDBObject("$exists", false));
@@ -59,8 +62,11 @@ public class EntitiesExtraction {
         for (DBObject hotelReviewDbObject : cursor) {
             List<DBObject> googleEntitiesDBObject = extractReviewTextAndGetEntities(hotelReviewDbObject);
             if (googleEntitiesDBObject != null) {
-                hotelReviewCollection.update(hotelReviewDbObject, new BasicDBObject("$set", new BasicDBObject(googleEntities.toString(), googleEntitiesDBObject)), false, false);
-                LOG.info("[{}] Updated hotel [{}] with review [{}] entities data: [{}]", googleApiCallCounter, hotelReviewDbObject.get(hotelName.toString()), hotelReviewDbObject.get(review.toString()), googleEntitiesDBObject);
+                hotelReviewCollection.update(hotelReviewDbObject, new BasicDBObject("$set", new BasicDBObject
+                        (googleEntities.toString(), googleEntitiesDBObject)), false, false);
+                LOG.info("[{}] Updated hotel [{}] with review [{}] entities data: [{}]", googleApiCallCounter,
+                        hotelReviewDbObject.get(hotelName.toString()), hotelReviewDbObject.get(review.toString()),
+                        googleEntitiesDBObject);
             }
         }
     }
@@ -68,24 +74,24 @@ public class EntitiesExtraction {
     /**
      * {@code extractReviewTextAndGetEntities} Invokes an entity extraction function for the review passed as parameter
      * and returns the result as a mongo Db object.
-     *
+     * <p>
      * <p>It doesn't invoke the entity analysis if the review {@link DBObject} already has the entity fields populated
      * to avoid making extra calls to the analysis API.
      *
      * @param hotelReviewDbObject A mongo db object containing the fields of a TripAdvisor review.
-     *
      * @return {@link List<DBObject>} with one entry for each entity found, mapped with
-     *         {@link GoogleLanguageApiDbParser#parseEntities}
+     * {@link GoogleLanguageApiDbParser#parseEntities}
      */
     private List<DBObject> extractReviewTextAndGetEntities(DBObject hotelReviewDbObject) {
-        String review = (String) hotelReviewDbObject.get(tripAdvisorReviewCollectionKeys.review.toString());
-        if (Strings.isNotEmpty(review)) {
-            Object googleEntities = hotelReviewDbObject.get(tripAdvisorReviewCollectionKeys.googleEntities.toString());
+        String reviewString = (String) hotelReviewDbObject.get(review.toString());
+        if (Strings.isNotEmpty(reviewString)) {
+            Object googleEntitiesList = hotelReviewDbObject.get(googleEntities.toString());
             if (googleEntities == null) {
-                return analyzeEntities(review);
+                return analyzeEntities(reviewString);
             } else {
-                List<DBObject> googleEntitiesDBObject = (List<DBObject>) googleEntities;
-                LOG.info("Review for hotel [{}] already has Google sentiment data [{}]", hotelReviewDbObject.get(hotelName.toString()), googleEntitiesDBObject);
+                List<DBObject> googleEntitiesDBObject = (List<DBObject>) googleEntitiesList;
+                LOG.info("Review for hotel [{}] already has Google sentiment data [{}]", hotelReviewDbObject.get
+                        (hotelName.toString()), googleEntitiesDBObject);
                 return googleEntitiesDBObject;
             }
         }
@@ -95,18 +101,19 @@ public class EntitiesExtraction {
     /**
      * {@code analyzeEntities} invokes Google's Natural Language Api entity recognition function to analyze the given
      * string.
-     *
+     * <p>
      * <p>If an error is returned from the analysis api is added to the {@link DBObject}
-     * @param  text Text to analyze.
      *
+     * @param text Text to analyze.
      * @return {@link List<DBObject>} with one entry for each entity found, mapped with
-     *         {@link GoogleLanguageApiDbParser#parseEntities}. Returns [@code null} if an exception is raised when invoking
-     *         Google's API.
+     * {@link GoogleLanguageApiDbParser#parseEntities}. Returns [@code null} if an exception is raised when invoking
+     * Google's API.
      */
     private List<DBObject> analyzeEntities(String text) {
         if (Strings.isNotEmpty(text)) {
             Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
-            AnalyzeEntitiesRequest request = AnalyzeEntitiesRequest.newBuilder().setDocument(doc).setEncodingType(EncodingType.UTF16).build();
+            AnalyzeEntitiesRequest request = AnalyzeEntitiesRequest.newBuilder().setDocument(doc).setEncodingType
+                    (EncodingType.UTF16).build();
             try {
                 AnalyzeEntitiesResponse response = languageApi.analyzeEntities(request);
                 googleApiCallCounter++;
