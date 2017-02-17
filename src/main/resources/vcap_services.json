@@ -1,0 +1,80 @@
+{
+  "AvailabilityMonitoring": [
+    {
+      "credentials": {
+        "id": "2c12d2b2-9fd0-4783-bcd1-6f5b7247e547",
+        "pass": "fdebd12d-4e73-4980-847b-05b7ed188cfb",
+        "url": "https://perfbroker.eu-gb.bluemix.net/1.0/credentials/2c12d2b2-9fd0-4783-bcd1-6f5b7247e547"
+      },
+      "label": "AvailabilityMonitoring",
+      "name": "availability-monitoring-auto",
+      "plan": "Lite",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
+        "ibm_created",
+        "bluemix_extensions",
+        "dev_ops"
+      ]
+    }
+  ],
+  "alchemy_api": [
+    {
+      "credentials": {
+        "apikey": "f0ca89811c65e12d7adb5535bb5e86f8d949746a",
+        "note": "This is your previous free key. If you want a different one, please wait 24 hours after unbinding the key and try again.",
+        "url": "https://gateway-a.watsonplatform.net/calls"
+      },
+      "label": "alchemy_api",
+      "name": "AlchemyAPI-63",
+      "plan": "free",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
+        "watson",
+        "ibm_created",
+        "ibm_dedicated_public"
+      ]
+    }
+  ],
+  "tone_analyzer": [
+    {
+      "credentials": {
+        "password": "neMPLzNKKRkW",
+        "url": "https://gateway.watsonplatform.net/tone-analyzer/api",
+        "username": "6aa78eb3-4039-4f94-840a-4b8b6c5969aa"
+      },
+      "label": "tone_analyzer",
+      "name": "Tone Analyzer-f1",
+      "plan": "standard",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
+        "watson",
+        "ibm_created",
+        "ibm_dedicated_public"
+      ]
+    }
+  ],
+  "twitterinsights": [
+    {
+      "credentials": {
+        "host": "cdeservice.eu-gb.mybluemix.net",
+        "password": "fdMvJxC8bw",
+        "port": 443,
+        "url": "https://15ca1c77-ba16-4887-a28d-9a96890cac31:fdMvJxC8bw@cdeservice.eu-gb.mybluemix.net",
+        "username": "15ca1c77-ba16-4887-a28d-9a96890cac31"
+      },
+      "label": "twitterinsights",
+      "name": "Insights for Twitter-3q",
+      "plan": "Free",
+      "provider": null,
+      "syslog_drain_url": null,
+      "tags": [
+        "big_data",
+        "ibm_created",
+        "ibm_dedicated_public"
+      ]
+    }
+  ]
+}
