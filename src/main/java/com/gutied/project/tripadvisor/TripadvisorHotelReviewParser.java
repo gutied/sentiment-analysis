@@ -38,9 +38,9 @@ import java.util.List;
  * - city: City where the hotel is.
  * - rank: Rank given to the hotel by the user.
  */
-public class TripAdvisorHotelReviewParser {
+public class TripadvisorHotelReviewParser {
 
-    private final static Logger LOG = LoggerFactory.getLogger(TripAdvisorHotelReviewParser.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewParser.class);
 
     private static final String quoteSelector = "#PAGEHEADING";
     private static final String hotelNameSelector = "#HR_HACKATHON_CONTENT > div.metaContent.fl > div" + "" + "" + ""
@@ -169,7 +169,7 @@ public class TripAdvisorHotelReviewParser {
 
     public static void main(String... args) {
         if (args.length == 1) {
-            TripAdvisorHotelReviewParser tripAdvisorHTMLReviewParser = new TripAdvisorHotelReviewParser();
+            TripadvisorHotelReviewParser tripAdvisorHTMLReviewParser = new TripadvisorHotelReviewParser();
             tripAdvisorHTMLReviewParser.parseAllReviews(new File(args[0]));
         } else {
             LOG.info("Enter base path for where the reviews are stored");

@@ -1,7 +1,7 @@
 package com.gutied.project.google;
 
 
-import com.gutied.project.tripadvisor.TripAdvisorHotelReviewParser;
+import com.gutied.project.tripadvisor.TripadvisorHotelReviewParser;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Geocoding {
 
-    private static Logger LOG = LoggerFactory.getLogger(TripAdvisorHotelReviewParser.class);
+    private static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewParser.class);
 
     public static int DELAY_BETWEEN_CALLS_IN_MILLS = 1000;
 

@@ -2,7 +2,7 @@ package com.gutied.project.tasks;
 
 import com.gutied.project.mongodb.GoogleGeocodingApiDbParser;
 import com.gutied.project.mongodb.MongoDB;
-import com.gutied.project.tripadvisor.TripAdvisorHotelReviewParser;
+import com.gutied.project.tripadvisor.TripadvisorHotelReviewParser;
 import com.google.maps.model.GeocodingResult;
 import com.gutied.project.google.Geocoding;
 import com.gutied.project.mongodb.HotelReviewDbParser;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GeolocateHotels {
 
-    private static Logger LOG = LoggerFactory.getLogger(TripAdvisorHotelReviewParser.class);
+    private static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewParser.class);
 
     public void geolocateAllHotelsAddressesAndSave() {
         DB mongoDb = MongoDB.getProjectDB();
