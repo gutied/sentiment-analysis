@@ -25,13 +25,13 @@ import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCo
  * json file containing Google's API key.
  * {@see https://developers.google.com/identity/protocols/application-default-credentials}
  */
-public class GoogleSentimentExtraction extends AbstractSentimentAnalysis {
+public class GoogleSentimentAnalysis extends AbstractSentimentAnalysis {
 
-    private static Logger LOG = LoggerFactory.getLogger(GoogleSentimentExtraction.class);
+    private static Logger LOG = LoggerFactory.getLogger(GoogleSentimentAnalysis.class);
 
     private final LanguageServiceClient languageApi;
 
-    protected GoogleSentimentExtraction() throws IOException {
+    protected GoogleSentimentAnalysis() throws IOException {
         languageApi = LanguageServiceClient.create();
     }
 
@@ -59,7 +59,7 @@ public class GoogleSentimentExtraction extends AbstractSentimentAnalysis {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 1) {
-            GoogleSentimentExtraction sentimentExtraction = new GoogleSentimentExtraction();
+            GoogleSentimentAnalysis sentimentExtraction = new GoogleSentimentAnalysis();
             sentimentExtraction.getAndSaveSentimentForAllReviewsInCity(args[0], googleSentiment.toString());
         } else {
             System.out.println("Enter the name of a city.");
