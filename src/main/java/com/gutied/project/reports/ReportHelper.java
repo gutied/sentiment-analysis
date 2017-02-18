@@ -15,7 +15,7 @@ public class ReportHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportHelper.class);
 
-    private static  void writeEntities(SortedMap<String, Long> entitiesHistogram, BufferedWriter writer, String type) {
+    private static void writeEntities(SortedMap<String, Long> entitiesHistogram, BufferedWriter writer, String type) {
         entitiesHistogram.keySet().iterator().forEachRemaining(key -> {
             try {
                 writer.write(key + ", " + entitiesHistogram.get(key) + ", " + type + "\n");
@@ -26,7 +26,8 @@ public class ReportHelper {
         });
     }
 
-    public static void writeResultsToFile(String filename, SortedMap<String, Long> positiveEntitiesHistogram, SortedMap<String, Long> negativeEntitiesHistogram) throws IOException {
+    public static void writeResultsToFile(String filename, SortedMap<String, Long> positiveEntitiesHistogram,
+                                          SortedMap<String, Long> negativeEntitiesHistogram) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename), StandardCharsets.UTF_16)) {
             writer.write("Entity, Occurrences, Quote sentiment\n");
             writeEntities(positiveEntitiesHistogram, writer, "positive");

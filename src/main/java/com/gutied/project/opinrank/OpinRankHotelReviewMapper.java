@@ -9,10 +9,10 @@ public class OpinRankHotelReviewMapper {
 
     private static DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-    public static BasicDBObject toDocument (OpinRankHotelReview hotelReview) {
+    public static BasicDBObject toDocument(OpinRankHotelReview hotelReview) {
         BasicDBObject document = new BasicDBObject();
         if (hotelReview.getDate() != null) {
-            document.put("date",  df.format(hotelReview.getDate()));
+            document.put("date", df.format(hotelReview.getDate()));
         }
         document.put("city", hotelReview.getCity());
         document.put("country", hotelReview.getCountry());

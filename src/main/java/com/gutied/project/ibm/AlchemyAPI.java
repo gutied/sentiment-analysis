@@ -15,7 +15,8 @@ public class AlchemyAPI {
     public AlchemyAPI() throws IOException {
 //        String env = System.getenv("VCAP_SERVICES");
 //        if (env == null){
-//            env = Utils.readFileToString(new File("D:\\Users\\david\\Project\\alchemy\\target\\classes\\vcap_services.json"));
+//            env = Utils.readFileToString(new File
+// ("D:\\Users\\david\\Project\\alchemy\\target\\classes\\vcap_services.json"));
 //        }
 //
 //        CredentialUtils.setServices(env);
@@ -32,7 +33,7 @@ public class AlchemyAPI {
 
 
     public void analyseSentence(String sentence) {
-        Map<String,Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put(AlchemyLanguage.TEXT, sentence);
         DocumentSentiment sentiment = al.getSentiment(params).execute();
         System.out.println(sentiment);

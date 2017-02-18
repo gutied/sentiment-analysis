@@ -1,8 +1,8 @@
 package com.gutied.project.tripadvisor;
 
 import com.gutied.project.Utils;
+import com.gutied.project.mongodb.HotelReviewDbMapper;
 import com.gutied.project.mongodb.MongoDB;
-import com.gutied.project.mongodb.HotelReviewDbParser;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import org.apache.commons.io.FileUtils;
@@ -38,9 +38,9 @@ import java.util.List;
  * - city: City where the hotel is.
  * - rank: Rank given to the hotel by the user.
  */
-public class TripadvisorHotelReviewParser {
+public class TripadvisorHotelReviewReader {
 
-    private final static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewParser.class);
+    private final static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewReader.class);
 
     private static final String quoteSelector = "#PAGEHEADING";
     private static final String hotelNameSelector = "#HR_HACKATHON_CONTENT > div.metaContent.fl > div" + "" + "" + ""
@@ -68,7 +68,7 @@ public class TripadvisorHotelReviewParser {
     private String currentCityName = "";
 
 
-    private TripAdvisorReview parseFile(String cityId, String hotelId, String reviewId, File reviewFile) {
+    private TripadvisorReview parseFile(String cityId, String hotelId, String reviewId, File reviewFile) {
         String reviewSelector = "#review_" + reviewId;
         String dateSelector = "#UR" + reviewId + " > div.col2of2 > div > div.rating.reviewItemInline > span.ratingDate";
         String reviewerLocationSelector = "#UR" + reviewId + " > div.col1of2 > div.member_info > div.location";
@@ -91,7 +91,7 @@ public class TripadvisorHotelReviewParser {
                 String reviewDateStr = doc.select(dateSelector).get(0).attr("content");
                 reviewDate = LocalDate.parse(reviewDateStr, reviewDateFormatter);
             }
-            return new TripAdvisorReview(cityId, hotelId, reviewId, quote, review, hotelName, cityName, address,
+            return new TripadvisorReview(cityId, hotelId, reviewId, quote, review, hotelName, cityName, address,
                     reviewerOrigin, reviewRank, reviewDate);
         } catch (IOException e) {
             LOG.error("Exception when extracting data from {}", reviewFile, e);
@@ -148,7 +148,7 @@ public class TripadvisorHotelReviewParser {
             numberOfReviewsForCity += numberOfReviewsForHotel;
             allReviewsForHotel.stream().forEach(review -> {
                 numberOfReviewsForHotel++;
-                TripAdvisorReview tripAdvisorReview = extractDataFromReviewAndStoreInCollection(reviewCollection,
+                TripadvisorReview tripAdvisorReview = extractDataFromReviewAndStoreInCollection(reviewCollection,
                         city, hotel, hotelFolder, review);
                 currentHotelName = tripAdvisorReview == null ? "" : tripAdvisorReview.getHotelName();
                 currentCityName = tripAdvisorReview == null ? "" : tripAdvisorReview.getCity();
@@ -158,18 +158,18 @@ public class TripadvisorHotelReviewParser {
         });
     }
 
-    private TripAdvisorReview extractDataFromReviewAndStoreInCollection(DBCollection reviewCollection, String city,
+    private TripadvisorReview extractDataFromReviewAndStoreInCollection(DBCollection reviewCollection, String city,
                                                                         String hotel, File hotelFolder, String review) {
-        TripAdvisorReview tripAdvisorReview = parseFile(city, hotel, review.split("\\.")[0], new File(hotelFolder,
+        TripadvisorReview tripAdvisorReview = parseFile(city, hotel, review.split("\\.")[0], new File(hotelFolder,
                 review));
-        reviewCollection.insert(HotelReviewDbParser.toDocument(tripAdvisorReview));
+        reviewCollection.insert(HotelReviewDbMapper.toDocument(tripAdvisorReview));
         LOG.info(tripAdvisorReview.toString());
         return tripAdvisorReview;
     }
 
     public static void main(String... args) {
         if (args.length == 1) {
-            TripadvisorHotelReviewParser tripAdvisorHTMLReviewParser = new TripadvisorHotelReviewParser();
+            TripadvisorHotelReviewReader tripAdvisorHTMLReviewParser = new TripadvisorHotelReviewReader();
             tripAdvisorHTMLReviewParser.parseAllReviews(new File(args[0]));
         } else {
             LOG.info("Enter base path for where the reviews are stored");

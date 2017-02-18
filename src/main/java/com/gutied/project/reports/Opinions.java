@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollection;
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.quote;
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.rank;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollection;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.quote;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.rank;
 
 public class Opinions {
 

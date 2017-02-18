@@ -2,9 +2,9 @@ package com.gutied.project.reports;
 
 
 import com.gutied.project.datasets.OpinionRange;
-import com.gutied.project.mongodb.IbmAlchemyApiParser;
+import com.gutied.project.mongodb.HotelReviewDbMapper;
+import com.gutied.project.mongodb.IbmAlchemyDbMapper;
 import com.gutied.project.mongodb.MongoDB;
-import com.gutied.project.mongodb.HotelReviewDbParser;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -17,13 +17,12 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import static com.gutied.project.reports.ReportHelper.writeResultsToFile;
+import static com.ibm.watson.developer_cloud.alchemy.v1.model.Sentiment.SentimentType.NEGATIVE;
+import static com.ibm.watson.developer_cloud.alchemy.v1.model.Sentiment.SentimentType.POSITIVE;
 
 public class IbmEntitiesReport {
 
     private long[] counters;
-
-    private static final String ALCHEMY_POSITIVE = "POSITIVE";
-    private static final String ALCHEMY_NEGATIVE = "NEGATIVE";
 
     public IbmEntitiesReport() {
         counters = new long[OpinionRange.values().length];
@@ -43,26 +42,26 @@ public class IbmEntitiesReport {
     private void extractPositiveAndNegativeEntitiesForQuote(SortedMap<String, Long> entitiesHistogram,
                                                             SortedMap<String, Long> negativeEntitiesHistogram,
                                                             DBObject reviewData) {
-        BasicDBList allEntities = (BasicDBList) reviewData.get(HotelReviewDbParser.tripAdvisorReviewCollectionKeys
+        BasicDBList allEntities = (BasicDBList) reviewData.get(HotelReviewDbMapper.tripAdvisorReviewCollectionKeys
                 .alchemyKeywords.toString());
         if (allEntities != null && allEntities.size() > 0) {
-            DBObject error = (DBObject) reviewData.get(IbmAlchemyApiParser.KeywordCollectionKeys.error.toString());
+            DBObject error = (DBObject) reviewData.get(IbmAlchemyDbMapper.KeywordCollectionKeys.error.toString());
             if (error == null) {
                 for (Object entitiesList : allEntities) {
                     BasicDBObject entitiesObject = (BasicDBObject) entitiesList;
-                    String entityName = (String) entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys.keyword
+                    String entityName = (String) entitiesObject.get(IbmAlchemyDbMapper.KeywordCollectionKeys.keyword
                             .toString());
                     if (Strings.isNotEmpty(entityName)) {
-                        String[] words = normalizeString(entityName);
+                        String[] words = normalizeEntities(entityName);
                         for (String word : words) {
                             word = word.trim();
                             if (word.length() > 2) {
-                                if (ALCHEMY_POSITIVE.equals(entitiesObject.get(IbmAlchemyApiParser.KeywordCollectionKeys
-                                        .sentiment.toString()))) {
+                                if (POSITIVE.name().equals(entitiesObject.get(IbmAlchemyDbMapper
+                                        .KeywordCollectionKeys.sentiment.toString()))) {
                                     Long entityCounter = entitiesHistogram.get(word.trim());
                                     entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
                                     entitiesHistogram.put(word.trim(), entityCounter);
-                                } else if (ALCHEMY_NEGATIVE.equals(entitiesObject.get(IbmAlchemyApiParser
+                                } else if (NEGATIVE.name().equals(entitiesObject.get(IbmAlchemyDbMapper
                                         .KeywordCollectionKeys.sentiment.toString()))) {
                                     Long entityCounter = negativeEntitiesHistogram.get(word.trim());
                                     entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
@@ -76,23 +75,23 @@ public class IbmEntitiesReport {
         }
     }
 
-    private String[] normalizeString(String string) {
+    private String[] normalizeEntities(String string) {
         string = string.toLowerCase().trim();
-//        string = string.replaceAll(",", " ");
-//        string = string.replaceAll("\\.", " ");
-//        string = string.replaceAll("-", " ");
-//        string = string.replaceAll("/", " ");
-//        string = string.replaceAll("!", " ");
-//        string = string.replaceAll("\\+", " ");
-//        string = string.replaceAll("\\(", " ");
-//        string = string.replaceAll("\\)", " ");
-//        string = string.replaceAll("\\)", " ");
-//        string = string.replaceAll("\\*", " ");
-//        string = string.replaceAll("&", " ");
-//        string = string.replaceAll("£", " ");
-//        string = string.replaceAll("$", " ");
-//        string = string.replaceAll("‘", " ");
-//        string = string.replaceAll("'", " ");
+        string = string.replaceAll(",", " ");
+        string = string.replaceAll("\\.", " ");
+        string = string.replaceAll("-", " ");
+        string = string.replaceAll("/", " ");
+        string = string.replaceAll("!", " ");
+        string = string.replaceAll("\\+", " ");
+        string = string.replaceAll("\\(", " ");
+        string = string.replaceAll("\\)", " ");
+        string = string.replaceAll("\\)", " ");
+        string = string.replaceAll("\\*", " ");
+        string = string.replaceAll("&", " ");
+        string = string.replaceAll("£", " ");
+        string = string.replaceAll("$", " ");
+        string = string.replaceAll("‘", " ");
+        string = string.replaceAll("'", " ");
         return string.split(" ");
     }
 

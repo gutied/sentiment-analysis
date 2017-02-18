@@ -4,8 +4,8 @@ import com.mongodb.*;
 
 import java.util.List;
 
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollection;
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.*;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollection;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
 
 public class MongoDB {
 
@@ -44,11 +44,11 @@ public class MongoDB {
     public static List<DBObject> getGoogleEntitiesAnalysisForAllQuotes() {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
-        DBObject query = new BasicDBObject(googleEntities.toString(), new BasicDBObject("$exists", true));
+        DBObject query = new BasicDBObject(entities.toString(), new BasicDBObject("$exists", true));
         DBObject projection = new BasicDBObject(quote.toString(), 1);
         projection.put(rank.toString(), 1);
         projection.put(googleSentiment.toString(), 1);
-        projection.put(googleEntities.toString(), 1);
+        projection.put(entities.toString(), 1);
         projection.put(reviewId.toString(), 1);
         return hotelReviewCollection.find(query).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
     }

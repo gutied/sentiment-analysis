@@ -3,7 +3,7 @@ package com.gutied.project.reports;
 
 import com.gutied.project.datasets.OpinionRange;
 import com.gutied.project.datasets.SentimentRange;
-import com.gutied.project.mongodb.GoogleLanguageApiDbParser.SentimentCollectionKeys;
+import com.gutied.project.mongodb.GoogleLanguageDbMapper.SentimentCollectionKeys;
 import com.gutied.project.mongodb.MongoDB;
 import com.mongodb.DBObject;
 import org.slf4j.Logger;
@@ -17,9 +17,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.gutied.project.mongodb.GoogleLanguageApiDbParser.SentimentCollectionKeys.magnitude;
-import static com.gutied.project.mongodb.GoogleLanguageApiDbParser.SentimentCollectionKeys.score;
-import static com.gutied.project.mongodb.HotelReviewDbParser.tripAdvisorReviewCollectionKeys.*;
+import static com.gutied.project.mongodb.GoogleLanguageDbMapper.SentimentCollectionKeys.magnitude;
+import static com.gutied.project.mongodb.GoogleLanguageDbMapper.SentimentCollectionKeys.score;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
 
 public class GoogleSentimentReport {
 
@@ -45,7 +45,8 @@ public class GoogleSentimentReport {
 
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename), StandardCharsets.UTF_16)) {
             boolean match = false;
-            writer.write("Review id, Tripadvisor quote, Tripadvisor rank, Google score, Google magnitude, Tripadvisor sentiment, Google sentiment, Match\n");
+            writer.write("Review id, Tripadvisor quote, Tripadvisor rank, Google score, Google magnitude, Tripadvisor" +
+                    " sentiment, Google sentiment, Match\n");
             for (DBObject reviewQuote : allQuotes) {
                 String comment = (String) reviewQuote.get(quote.toString());
                 Double tripAdvisorRank = (Double) reviewQuote.get(rank.toString());
@@ -66,23 +67,30 @@ public class GoogleSentimentReport {
                     } else {
                         noMatches[tripadvisorSentimentType.ordinal()]++;
                         match = false;
-                        LOG.info("No match Tripadvisor: {} {} Google {} {} - {}", tripadvisorSentimentType.name(), tripAdvisorRank, googleSentimentType.name(), googleSentimentScore, comment);
+                        LOG.info("No match Tripadvisor: {} {} Google {} {} - {}", tripadvisorSentimentType.name(),
+                                tripAdvisorRank, googleSentimentType.name(), googleSentimentScore, comment);
                     }
                 } else {
                     objectsWhereSentimentAnalysisWasNotConclusive++;
                     googleSentimentScore = 0.0;
                     googleSentimentMagnitude = 0.0;
                 }
-                writer.write(createSentimentReportLine(match, comment, tripAdvisorRank, reviewIdentifier, googleSentimentType, tripadvisorSentimentType, googleSentimentObject, googleSentimentScore, googleSentimentMagnitude));
+                writer.write(createSentimentReportLine(match, comment, tripAdvisorRank, reviewIdentifier,
+                        googleSentimentType, tripadvisorSentimentType, googleSentimentObject, googleSentimentScore,
+                        googleSentimentMagnitude));
             }
         }
-        Arrays.stream(SentimentRange.values()).forEach(x -> LOG.info("{} Matches: {}  No matches: {}", x.name(), matches[x.ordinal()], noMatches[x.ordinal()]));
-        LOG.info("Quotes where sentiment Analysis was not conclusive {}", objectsWhereSentimentAnalysisWasNotConclusive);
+        Arrays.stream(SentimentRange.values()).forEach(x -> LOG.info("{} Matches: {}  No matches: {}", x.name(),
+                matches[x.ordinal()], noMatches[x.ordinal()]));
+        LOG.info("Quotes where sentiment Analysis was not conclusive {}",
+                objectsWhereSentimentAnalysisWasNotConclusive);
 
     }
 
 
-    private String createSentimentReportLine(boolean match, String comment, Double tripAdvisorRank, String reviewIdentifier, SentimentRange googleSentimentType, SentimentRange tripadvisorSentimentType, DBObject googleSentimentObject, Double googleSentimentScore, Double googleSentimentMagnitude) {
+    private String createSentimentReportLine(boolean match, String comment, Double tripAdvisorRank, String
+            reviewIdentifier, SentimentRange googleSentimentType, SentimentRange tripadvisorSentimentType, DBObject
+            googleSentimentObject, Double googleSentimentScore, Double googleSentimentMagnitude) {
         StringBuffer sb = new StringBuffer();
         sb.append(reviewIdentifier).append(", ");
         sb.append(comment.replaceAll(",", "").replaceAll("“", "").replaceAll("”", "")).append(", ");

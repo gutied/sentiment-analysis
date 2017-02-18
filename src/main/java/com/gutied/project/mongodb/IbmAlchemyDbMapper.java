@@ -1,5 +1,6 @@
 package com.gutied.project.mongodb;
 
+import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Keyword;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.Keywords;
 import com.mongodb.BasicDBObject;
@@ -8,7 +9,7 @@ import com.mongodb.DBObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IbmAlchemyApiParser {
+public class IbmAlchemyDbMapper {
 
     public enum KeywordCollectionKeys {error, keyword, relevance, sentiment, sentimentScore}
 
@@ -25,4 +26,13 @@ public class IbmAlchemyApiParser {
         return result;
 
     }
+
+    public static DBObject parseKeywords(DocumentSentiment sentiment) {
+        BasicDBObject result = new BasicDBObject();
+        result.put(KeywordCollectionKeys.keyword.toString(), sentiment.getSentiment().getType().name());
+        result.put(KeywordCollectionKeys.relevance.toString(), sentiment.getSentiment().getScore());
+        result.put(KeywordCollectionKeys.sentiment.toString(), sentiment.getSentiment().getMixed());
+        return result;
+    }
+
 }

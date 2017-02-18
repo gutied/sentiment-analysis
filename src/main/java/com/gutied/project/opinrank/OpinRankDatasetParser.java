@@ -42,7 +42,8 @@ public class OpinRankDatasetParser {
         Arrays.stream(listFolders(BASE_FOLDER)).forEach(cityName -> loadAllFilesInFolder(cityName));
         DB db = mongo.getDB("reviews_test");
         DBCollection table = db.getCollection("opinRank");
-        allHotelReviews.stream().forEach(hotelReview -> table.insert(OpinRankHotelReviewMapper.toDocument(hotelReview)));
+        allHotelReviews.stream().forEach(hotelReview -> table.insert(OpinRankHotelReviewMapper.toDocument
+                (hotelReview)));
 
     }
 
@@ -55,7 +56,9 @@ public class OpinRankDatasetParser {
     public void loadAllFilesInFolder(String cityName) {
         File foldersWithReviewsForCity = new File(BASE_FOLDER, cityName);
         String[] hotelReviews = foldersWithReviewsForCity.list();
-        Arrays.stream(hotelReviews).forEach(hotelReviewsFileName -> loadAllReviewsFromFile(extractHotelCountry(hotelReviewsFileName), cityName, extracHotelName(cityName, hotelReviewsFileName), new File(foldersWithReviewsForCity, hotelReviewsFileName)));
+        Arrays.stream(hotelReviews).forEach(hotelReviewsFileName -> loadAllReviewsFromFile(extractHotelCountry
+                (hotelReviewsFileName), cityName, extracHotelName(cityName, hotelReviewsFileName), new File
+                (foldersWithReviewsForCity, hotelReviewsFileName)));
     }
 
     private String extracHotelName(String city, String fileName) {

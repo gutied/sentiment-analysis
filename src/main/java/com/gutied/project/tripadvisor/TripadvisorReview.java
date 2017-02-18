@@ -3,7 +3,7 @@ package com.gutied.project.tripadvisor;
 
 import java.time.LocalDate;
 
-public class TripAdvisorReview {
+public class TripadvisorReview {
 
     private String cityId;
     private String hotelId;
@@ -17,7 +17,8 @@ public class TripAdvisorReview {
     private Double rank;
     private LocalDate date;
 
-    public TripAdvisorReview(String cityId, String hotelId, String reviewId, String quote, String review, String hotelName, String city, String address, String reviewerOrigin, Double rank, LocalDate date) {
+    public TripadvisorReview(String cityId, String hotelId, String reviewId, String quote, String review, String
+            hotelName, String city, String address, String reviewerOrigin, Double rank, LocalDate date) {
         this.cityId = cityId;
         this.hotelId = hotelId;
         this.reviewId = reviewId;
@@ -121,17 +122,9 @@ public class TripAdvisorReview {
 
     @Override
     public String toString() {
-        return "TripAdvisorReview{" +
-                "cityId='" + cityId + '\'' +
-                ", hotelId='" + hotelId + '\'' +
-                ", reviewId='" + reviewId + '\'' +
-                ", city='" + city + '\'' +
-                ", hotelName='" + hotelName + '\'' +
-                ", date=" + date +
-                ", rank=" + rank +
-                ", quote='" + quote + '\'' +
-                ", address='" + address + '\'' +
-                ", reviewerOrigin='" + reviewerOrigin + '\'' +
-                '}';
+        return "TripadvisorReview{" + "cityId='" + cityId + '\'' + ", hotelId='" + hotelId + '\'' + ", reviewId='" +
+                reviewId + '\'' + ", city='" + city + '\'' + ", hotelName='" + hotelName + '\'' + ", date=" + date +
+                ", rank=" + rank + ", quote='" + quote + '\'' + ", address='" + address + '\'' + ", reviewerOrigin='"
+                + reviewerOrigin + '\'' + '}';
     }
 }
