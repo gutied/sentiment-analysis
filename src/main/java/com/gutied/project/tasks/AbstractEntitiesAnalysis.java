@@ -14,8 +14,8 @@ import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCo
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
 
 /**
- * Application that reads all the hotel reviews for a given city from the database and invokes a
- * entity recognition function to analyze the entities in the hotel's review text.
+ * Reads hotel reviews for a given city from a database and invokes a natural language function to extract entities
+ * from the hotel's review text.
  * <p>
  * <p>The application stores the results in the database.
  */
@@ -80,7 +80,7 @@ public abstract class AbstractEntitiesAnalysis {
      * <p>If an error is returned from the analysis api is added to the {@link DBObject}
      *
      * @param text Text to analyze.
-     * @return {@link List<DBObject>} with one entry for each entity found, mapped with
+     * @return {@link List<DBObject>} List with one element for each entity found.
      */
     abstract protected List<DBObject> analyzeEntities(String text);
 

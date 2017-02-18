@@ -122,7 +122,7 @@ public class GoogleSentimentReport {
 
     public static void main(String[] args) throws IOException {
         GoogleSentimentReport quoteDataSet = new GoogleSentimentReport();
-        quoteDataSet.createSentimentReport(args[0]);
+        quoteDataSet.createSentimentReport("GoogleSentiment.csv");
     }
 
 }

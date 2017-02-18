@@ -17,7 +17,7 @@ import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCo
 
 /**
  * Application that reads all the hotel reviews for a given city from the database and invokes Google's
- * Natural Language Api to analyse the semtiment of the quote of the hotel's review.
+ * Natural Language Api to analyse the sentiment of the quote of the hotel's review.
  * <p>
  * <p>The application stores the results in the database.
  * <p>

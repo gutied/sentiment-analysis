@@ -5,6 +5,9 @@ import com.gutied.project.mongodb.IbmAlchemyDbMapper;
 import com.gutied.project.tasks.AbstractSentimentAnalysis;
 import com.ibm.watson.developer_cloud.alchemy.v1.AlchemyLanguage;
 import com.ibm.watson.developer_cloud.alchemy.v1.model.DocumentSentiment;
+import com.ibm.watson.developer_cloud.service.exception.BadRequestException;
+import com.ibm.watson.developer_cloud.service.exception.TooManyRequestsException;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +36,12 @@ public class AlchemySentimentAnalysis extends AbstractSentimentAnalysis {
             DocumentSentiment sentiment = alchemyLanguage.getSentiment(params).execute();
             apiCallCounter++;
             return IbmAlchemyDbMapper.parseKeywords(sentiment);
-        } catch (Exception e) {
-            LOG.error("Exception on call to Google API [{}]", e.getMessage());
-//            List<DBObject> errorResponse = new ArrayList<>(1);
-//            errorResponse.add(new BasicDBObject("error", e.getMessage()));
+        } catch (IllegalArgumentException | BadRequestException e) {
+            LOG.error("Exception on call to API [{}]", e.getMessage());
+            return new BasicDBObject("error", e.getMessage());
+        } catch (TooManyRequestsException tooManyRequestsException) {
+            LOG.error("Daily transaction limit exceeded", tooManyRequestsException.getMessage());
+            System.exit(1);
             return null;
         }
     }
