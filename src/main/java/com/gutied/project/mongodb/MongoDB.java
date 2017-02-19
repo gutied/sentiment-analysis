@@ -30,15 +30,25 @@ public class MongoDB {
         return mongo.getDB(PROJECT_DB_NAME);
     }
 
-    public static List<DBObject> getGoogleSentimentDataForAllQuotes() {
+    public static DBCursor getAllQuotes() {
         DB mongoDb = getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
-        DBObject query = new BasicDBObject(googleSentiment.toString(), new BasicDBObject("$exists", true));
+        DBObject query = new BasicDBObject(quote.toString(), new BasicDBObject("$exists", true));
         DBObject projection = new BasicDBObject(quote.toString(), 1);
         projection.put(rank.toString(), 1);
-        projection.put(googleSentiment.toString(), 1);
+        projection.put(quote.toString(), 1);
+        return hotelReviewCollection.find(query, projection);
+    }
+
+    public static List<DBObject> getSentimentDataForAllQuotes(String sentimentCollection) {
+        DB mongoDb = getProjectDB();
+        DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
+        DBObject query = new BasicDBObject(sentimentCollection, new BasicDBObject("$exists", true));
+        DBObject projection = new BasicDBObject(quote.toString(), 1);
+        projection.put(rank.toString(), 1);
+        projection.put(sentimentCollection, 1);
         projection.put(reviewId.toString(), 1);
-        return hotelReviewCollection.find(query).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
+        return hotelReviewCollection.find(query, projection).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
     }
 
     public static List<DBObject> getGoogleEntitiesAnalysisForAllQuotes() {
@@ -50,7 +60,19 @@ public class MongoDB {
         projection.put(googleSentiment.toString(), 1);
         projection.put(entities.toString(), 1);
         projection.put(reviewId.toString(), 1);
-        return hotelReviewCollection.find(query).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
+        return hotelReviewCollection.find(query, projection).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
+    }
+
+    public static List<DBObject> getAzureEntitiesAnalysisForAllQuotes() {
+        DB mongoDb = MongoDB.getProjectDB();
+        DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
+        DBObject query = new BasicDBObject(azureEntities.toString(), new BasicDBObject("$exists", true));
+        DBObject projection = new BasicDBObject(quote.toString(), 1);
+        projection.put(rank.toString(), 1);
+        projection.put(azureSentiment.toString(), 1);
+        projection.put(azureEntities.toString(), 1);
+        projection.put(reviewId.toString(), 1);
+        return hotelReviewCollection.find(query, projection).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
     }
 
     public static List<DBObject> getIbmEntitiesAnalysisForAllQuotes() {
@@ -61,7 +83,7 @@ public class MongoDB {
         projection.put(rank.toString(), 1);
         projection.put(alchemyKeywords.toString(), 1);
         projection.put(reviewId.toString(), 1);
-        return hotelReviewCollection.find(query).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
+        return hotelReviewCollection.find(query, projection).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
     }
 
 }

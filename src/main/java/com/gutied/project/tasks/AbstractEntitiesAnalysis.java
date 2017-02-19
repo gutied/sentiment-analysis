@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollection;
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
+import static java.util.regex.Pattern.compile;
 
 /**
  * Reads hotel reviews for a given city from a database and invokes a natural language function to extract entities
@@ -27,15 +28,16 @@ public abstract class AbstractEntitiesAnalysis {
      * {@code findAndSaveEntitiesForAllReviewsInCity} finds all TripAdvisor reviews in the db, invokes an entity
      * extraction function for the review and stores the result in the specified collection.
      *
-     * @param city         The city for which reviews analyze.
+     * @param cityName         The city for which reviews analyze.
      * @param documentName Name of the document where to store the sentiment analysis results.
      */
-    protected void findAndSaveEntitiesForAllReviewsInCity(String city, String documentName) {
+    protected void findAndSaveEntitiesForAllReviewsInCity(String cityName, String documentName) {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
-        DBObject query = new BasicDBObject(documentName, new BasicDBObject("$exists", false));
-        query.put(tripAdvisorReviewCollectionKeys.city.toString(), city);
-        DBCursor cursor = hotelReviewCollection.find(query).addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+        DBObject queryDocument = new BasicDBObject(documentName, new BasicDBObject("$exists", false));
+        queryDocument.put(city.toString(), cityName);
+        queryDocument.put(date.toString(), compile("2016"));
+        DBCursor cursor = hotelReviewCollection.find(queryDocument).addOption(Bytes.QUERYOPTION_NOTIMEOUT);
 
         for (DBObject hotelReviewDbObject : cursor) {
             List<DBObject> entitiesDBObject = extractReviewTextAndGetEntities(hotelReviewDbObject, documentName);
@@ -62,7 +64,7 @@ public abstract class AbstractEntitiesAnalysis {
         String reviewString = (String) hotelReviewDbObject.get(review.toString());
         if (Strings.isNotEmpty(reviewString)) {
             Object entitiesList = hotelReviewDbObject.get(documentName);
-            if (entities == null) {
+            if (entitiesList == null) {
                 return analyzeEntities(reviewString);
             } else {
                 List<DBObject> entitiesDBObject = (List<DBObject>) entitiesList;
