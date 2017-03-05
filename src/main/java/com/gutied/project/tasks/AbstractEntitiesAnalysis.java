@@ -15,7 +15,7 @@ import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCo
 import static java.util.regex.Pattern.compile;
 
 /**
- * Reads hotel reviews for a given city from a database and invokes a natural language function to extract entities
+ * Reads hotel reviews for a given city from a database and invokes a natural language function to extract googleEntities
  * from the hotel's review text.
  * <p>
  * <p>The application stores the results in the database.
@@ -44,7 +44,7 @@ public abstract class AbstractEntitiesAnalysis {
             if (entitiesDBObject != null) {
                 hotelReviewCollection.update(hotelReviewDbObject, new BasicDBObject("$set", new BasicDBObject
                         (documentName, entitiesDBObject)), false, false);
-                LOG.info("Updated hotel [{}] with review [{}] entities data: [{}]", hotelReviewDbObject.get(hotelName
+                LOG.info("Updated hotel [{}] with review [{}] googleEntities data: [{}]", hotelReviewDbObject.get(hotelName
                         .toString()), hotelReviewDbObject.get(review.toString()), entitiesDBObject);
             }
         }

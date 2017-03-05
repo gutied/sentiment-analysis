@@ -1,10 +1,11 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.entities;
 
 
 import com.gutied.project.datasets.OpinionRange;
 import com.gutied.project.datasets.SentimentRange;
 import com.gutied.project.mongodb.GoogleLanguageDbMapper;
 import com.gutied.project.mongodb.MongoDB;
+import com.gutied.project.reports.ReportHelper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -20,6 +21,7 @@ import static com.gutied.project.mongodb.AzureDbMapper.AzureEntitiesCollectionKe
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.azureEntities;
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.azureSentiment;
 import static com.gutied.project.reports.ReportHelper.writeResultsToFile;
+import static com.gutied.project.reports.ReportHelper.writeResultsToFileOcurrences;
 
 public class AzureEntitiesReport {
 
@@ -51,7 +53,7 @@ public class AzureEntitiesReport {
                 String entityName = (String) entitiesObject.get(name.toString());
                 if (Strings.isNotEmpty(entityName)) {
                     entityName = entityName.toLowerCase().trim();
-                    String[] words = entityName.split(" ");
+                    String[] words = ReportHelper.normalizeEntities(entityName);
                     for (String word : words) {
                         word = word.trim();
                         if (word.length() > 2) {
@@ -70,7 +72,6 @@ public class AzureEntitiesReport {
             }
         }
     }
-
 
 
     private SentimentRange getAzureSentimentRange(DBObject googleSentimentObject) {

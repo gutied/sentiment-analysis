@@ -54,11 +54,11 @@ public class MongoDB {
     public static List<DBObject> getGoogleEntitiesAnalysisForAllQuotes() {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
-        DBObject query = new BasicDBObject(entities.toString(), new BasicDBObject("$exists", true));
+        DBObject query = new BasicDBObject(googleEntities.toString(), new BasicDBObject("$exists", true));
         DBObject projection = new BasicDBObject(quote.toString(), 1);
         projection.put(rank.toString(), 1);
         projection.put(googleSentiment.toString(), 1);
-        projection.put(entities.toString(), 1);
+        projection.put(googleEntities.toString(), 1);
         projection.put(reviewId.toString(), 1);
         return hotelReviewCollection.find(query, projection).addOption(Bytes.QUERYOPTION_NOTIMEOUT).toArray();
     }

@@ -1,10 +1,11 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.entities;
 
 
 import com.gutied.project.datasets.OpinionRange;
 import com.gutied.project.mongodb.HotelReviewDbMapper;
 import com.gutied.project.mongodb.IbmAlchemyDbMapper;
 import com.gutied.project.mongodb.MongoDB;
+import com.gutied.project.reports.ReportHelper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -16,15 +17,15 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static com.gutied.project.reports.ReportHelper.writeResultsToFile;
+import static com.gutied.project.reports.ReportHelper.writeResultsToFileOcurrences;
 import static com.ibm.watson.developer_cloud.alchemy.v1.model.Sentiment.SentimentType.NEGATIVE;
 import static com.ibm.watson.developer_cloud.alchemy.v1.model.Sentiment.SentimentType.POSITIVE;
 
-public class IbmEntitiesReport {
+public class AlchemyEntitiesReport {
 
     private long[] counters;
 
-    public IbmEntitiesReport() {
+    public AlchemyEntitiesReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
@@ -36,7 +37,7 @@ public class IbmEntitiesReport {
         for (DBObject quote : quotes) {
             extractPositiveAndNegativeEntitiesForQuote(positiveEntitiesHistogram, negativeEntitiesHistogram, quote);
         }
-        writeResultsToFile(filename, positiveEntitiesHistogram, negativeEntitiesHistogram);
+        writeResultsToFileOcurrences(filename, positiveEntitiesHistogram, negativeEntitiesHistogram);
     }
 
     private void extractPositiveAndNegativeEntitiesForQuote(SortedMap<String, Long> entitiesHistogram,
@@ -52,7 +53,7 @@ public class IbmEntitiesReport {
                     String entityName = (String) entitiesObject.get(IbmAlchemyDbMapper.KeywordCollectionKeys.keyword
                             .toString());
                     if (Strings.isNotEmpty(entityName)) {
-                        String[] words = normalizeEntities(entityName);
+                        String[] words = ReportHelper.normalizeEntities(entityName);
                         for (String word : words) {
                             word = word.trim();
                             if (word.length() > 2) {
@@ -75,28 +76,10 @@ public class IbmEntitiesReport {
         }
     }
 
-    private String[] normalizeEntities(String string) {
-        string = string.toLowerCase().trim();
-        string = string.replaceAll(",", " ");
-        string = string.replaceAll("\\.", " ");
-        string = string.replaceAll("-", " ");
-        string = string.replaceAll("/", " ");
-        string = string.replaceAll("!", " ");
-        string = string.replaceAll("\\+", " ");
-        string = string.replaceAll("\\(", " ");
-        string = string.replaceAll("\\)", " ");
-        string = string.replaceAll("\\)", " ");
-        string = string.replaceAll("\\*", " ");
-        string = string.replaceAll("&", " ");
-        string = string.replaceAll("£", " ");
-        string = string.replaceAll("$", " ");
-        string = string.replaceAll("‘", " ");
-        string = string.replaceAll("'", " ");
-        return string.split(" ");
-    }
+
 
     public static void main(String[] args) throws IOException {
-        IbmEntitiesReport quoteDataSet = new IbmEntitiesReport();
+        AlchemyEntitiesReport quoteDataSet = new AlchemyEntitiesReport();
         quoteDataSet.createEntitiesReport("AlchemyEntities.csv");
     }
 

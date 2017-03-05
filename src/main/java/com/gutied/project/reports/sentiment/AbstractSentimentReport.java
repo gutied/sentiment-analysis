@@ -1,4 +1,4 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.sentiment;
 
 
 import com.gutied.project.datasets.OpinionRange;

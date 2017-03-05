@@ -46,7 +46,7 @@ public class TripadvisorHotelReviewReader {
     private static final String hotelNameSelector = "#HR_HACKATHON_CONTENT > div.metaContent.fl > div" + "" + "" + ""
             + ".locationContent" + " > div.surContent > a";
     private static final String reviewRankSelector = "#PAGEHEADING > span.rate.sprite-rating_no.rating_no > img";
-    private static final String cityNameSelector = "#BREADCRUMBS > li:nth-child(5) > a > span";
+    private static final String cityNameSelector = "#taplc_breadcrumb_desktop_0 > div > div > ul > li:nth-child(5) > a > span";
     private static final String reviewDateFormat = "yyyy-MM-dd";
     private static final String addressStreetSelector = "#HR_HACKATHON_CONTENT > div.metaContent.fl > div" + "" + ""
             + ".locationContent > div.surContent > div > address > span:nth-child(4) > span > span.street-address";
@@ -112,16 +112,16 @@ public class TripadvisorHotelReviewReader {
         return sb.toString();
     }
 
-    public void parseAllReviews(File baseFolder) {
+    public void parseAllReviews(File baseFolder, String collectionName) {
         LOG.info("Parsing all reviews from " + baseFolder.getPath());
 
         DB mongoDb = MongoDB.getProjectDB();
-        DBCollection reviewCollection = mongoDb.getCollection("tripadvisor_reviews");
+        DBCollection reviewCollection = mongoDb.getCollection(collectionName);
 
         List<String> allCities = Utils.listFolders(baseFolder);
         LOG.info("Found {} cities", allCities.size());
         allCities.stream().forEach(city -> {
-            parseAllReviesForCity(baseFolder, reviewCollection, city);
+            parseAllReviewsForCity(baseFolder, reviewCollection, city);
             LOG.info("Parsed reviews {} for {} hotels in {}", numberOfReviewsForCity, numberOfHotelsInCity,
                     currentCityName);
             numberOfHotels += numberOfHotelsInCity;
@@ -132,7 +132,7 @@ public class TripadvisorHotelReviewReader {
         LOG.info("Parsed {} reviews  for {} hotels in {} cities", numberOfReviews, numberOfHotels, numberOfCities);
     }
 
-    private void parseAllReviesForCity(File baseFolder, DBCollection reviewCollection, String city) {
+    private void parseAllReviewsForCity(File baseFolder, DBCollection reviewCollection, String city) {
         numberOfCities++;
         File cityFolder = new File(baseFolder, city);
         List<String> allHotelsInCity = Utils.listFolders(cityFolder);
@@ -168,9 +168,9 @@ public class TripadvisorHotelReviewReader {
     }
 
     public static void main(String... args) {
-        if (args.length == 1) {
-            TripadvisorHotelReviewReader tripAdvisorHTMLReviewParser = new TripadvisorHotelReviewReader();
-            tripAdvisorHTMLReviewParser.parseAllReviews(new File(args[0]));
+        if (args.length == 2) {
+            TripadvisorHotelReviewReader tripAdvisorHTMLReviewReader = new TripadvisorHotelReviewReader();
+            tripAdvisorHTMLReviewReader.parseAllReviews(new File(args[0]), args[1]);
         } else {
             LOG.info("Enter base path for where the reviews are stored");
         }

@@ -1,4 +1,4 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.sentiment;
 
 
 import com.gutied.project.datasets.SentimentRange;
@@ -8,13 +8,14 @@ import java.io.IOException;
 
 import static com.gutied.project.mongodb.GoogleLanguageDbMapper.GoogleSentimentCollectionKeys.magnitude;
 import static com.gutied.project.mongodb.GoogleLanguageDbMapper.GoogleSentimentCollectionKeys.score;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.alchemySentiment;
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.googleSentiment;
 
-public class GoogleSentimentReport extends AbstractSentimentReport {
+public class IbmSentimentReport extends AbstractSentimentReport {
 
 
     protected SentimentRange getSentimentRange(Double googleSentimentScore) {
-        return SentimentRange.getGoogleSentimentRange(googleSentimentScore);
+        return SentimentRange.getAlchemySentimentRange(googleSentimentScore);
     }
 
     protected boolean containsSentimentEntry(DBObject googleSentimentObject) {
@@ -25,8 +26,8 @@ public class GoogleSentimentReport extends AbstractSentimentReport {
     }
 
     public static void main(String[] args) throws IOException {
-        GoogleSentimentReport quoteDataSet = new GoogleSentimentReport();
-        quoteDataSet.createSentimentReport("Google", "GoogleSentiment.csv", googleSentiment.toString(), magnitude.toString(), magnitude
+        IbmSentimentReport quoteDataSet = new IbmSentimentReport();
+        quoteDataSet.createSentimentReport("IBM", "IbmSentimentReport.csv", alchemySentiment.toString(), magnitude.toString(), magnitude
                 .toString());
     }
 

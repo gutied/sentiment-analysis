@@ -4,6 +4,8 @@ package com.gutied.project.tasks;
 import com.gutied.project.datasets.SentimentRange;
 import com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys;
 import com.gutied.project.mongodb.MongoDB;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import org.apache.logging.log4j.util.Strings;
@@ -16,6 +18,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollection;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.quote;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.rank;
+
 public class CreateTrainingSets {
 
 
@@ -23,12 +29,23 @@ public class CreateTrainingSets {
         List<String> positiveQuotes = new ArrayList();
         List<String> negativeQuotes = new ArrayList();
 
-        DBCursor quotesCursor = MongoDB.getAllQuotes();
+
+        DBObject clause1 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Adeje"));
+        DBObject clause2 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Puerto de la Cruz"));
+        BasicDBList or = new BasicDBList();
+        or.add(clause1);
+        or.add(clause2);
+        DBObject query = new BasicDBObject("$and", or);
+        DBObject projection = new BasicDBObject(quote.toString(), 1);
+        projection.put(rank.toString(), 1);
+        projection.put(quote.toString(), 1);
+
+        DBCursor quotesCursor = MongoDB.getProjectDB().getCollection(tripAdvisorReviewCollection).find(query, projection);
         for (DBObject quoteObject  : quotesCursor ) {
             String quote = (String) quoteObject.get(tripAdvisorReviewCollectionKeys.quote.toString());
             Double rank = (Double) quoteObject.get(tripAdvisorReviewCollectionKeys.rank.toString());
-            if (Strings.isNotEmpty(quote) && rank != null) {
-                quote = normalizeEntities(quote) + "\n";
+            if (Strings.isNotEmpty(quote) && rank != null && (rank == 1 || rank == 5)) {
+                quote = normalizeString(quote) + "\n";
                 SentimentRange quoteSentiment = SentimentRange.getTripAdvisorRange(rank);
                 if (SentimentRange.positive.equals(quoteSentiment)) {
                     positiveQuotes.add(quote);
@@ -37,12 +54,42 @@ public class CreateTrainingSets {
                 }
             }
         }
-        writeTrainigSetToDisk(positiveQuotes, "PositiveQuotes.txt");
-        writeTrainigSetToDisk(negativeQuotes, "NegativeQuotes.txt");
+        writeTrainigSetToDisk(positiveQuotes, "PositiveQuotesTraining.txt");
+        writeTrainigSetToDisk(negativeQuotes, "NegativeQuotesTraining.txt");
     }
 
+    private void createEvaluationSets() throws IOException {
+        List<String> positiveQuotes = new ArrayList();
+        List<String> negativeQuotes = new ArrayList();
+
+        DBObject clause1 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), "Puerto de la Cruz");
+        DBObject clause2 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), "Adeje");
+        BasicDBList or = new BasicDBList();
+        or.add(clause1);
+        or.add(clause2);
+        DBObject query = new BasicDBObject("$or", or);
+
+        DBCursor quotesCursor = MongoDB.getAllQuotes();
+        for (DBObject quoteObject  : quotesCursor ) {
+            String quote = (String) quoteObject.get(tripAdvisorReviewCollectionKeys.quote.toString());
+            Double rank = (Double) quoteObject.get(tripAdvisorReviewCollectionKeys.rank.toString());
+            if (Strings.isNotEmpty(quote) && rank != null) {
+                quote = normalizeString(quote) + "\n";
+                SentimentRange quoteSentiment = SentimentRange.getTripAdvisorRange(rank);
+                if (SentimentRange.positive.equals(quoteSentiment)) {
+                    positiveQuotes.add(quote);
+                } else {
+                    negativeQuotes.add(quote);
+                }
+            }
+        }
+        writeTrainigSetToDisk(positiveQuotes, "PositiveQuotesEval.txt");
+        writeTrainigSetToDisk(negativeQuotes, "NegativeQuotesEval .txt");
+    }
+
+
     private void writeTrainigSetToDisk(List<String> positiveQuotes, String fileName) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName), StandardCharsets.UTF_16)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName), StandardCharsets.UTF_8)) {
             positiveQuotes.stream().forEach((str) -> {
                 try {
                     writer.write(str);
@@ -53,8 +100,7 @@ public class CreateTrainingSets {
         }
     }
 
-    private String normalizeEntities(String string) {
-        string = string.toLowerCase().trim();
+    private String normalizeString(String string) {
         string = string.replaceAll(",", " ");
         string = string.replaceAll("\\.", " ");
         string = string.replaceAll("-", " ");
@@ -70,6 +116,9 @@ public class CreateTrainingSets {
         string = string.replaceAll("‘", "");
         string = string.replaceAll("'", "");
         string = string.replaceAll("\"", "");
+        string = string.replaceAll("”", "");
+        string = string.replaceAll("“", "");
+        string = string.toLowerCase().trim();
         return string;
     }
 

@@ -18,11 +18,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.entities;
+import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.googleEntities;
 
 /**
  * Application that reads all the hotel reviews for a given city from the database and invokes Google's
- * Natural Language Api entity recognition function to analyze the entities in the hotel's review text.
+ * Natural Language Api entity recognition function to analyze the googleEntities in the hotel's review text.
  * <p>
  * <p>The application stores the results in the database.
  * <p>
@@ -73,7 +73,7 @@ public class GoogleEntitiesAnalysis extends AbstractEntitiesAnalysis {
     public static void main(String[] args) throws IOException {
         if (args.length == 1) {
             GoogleEntitiesAnalysis sentimentExtraction = new GoogleEntitiesAnalysis();
-            sentimentExtraction.findAndSaveEntitiesForAllReviewsInCity(args[0], entities.toString());
+            sentimentExtraction.findAndSaveEntitiesForAllReviewsInCity(args[0], googleEntities.toString());
         } else {
             System.out.println("Enter the name of a city.");
         }

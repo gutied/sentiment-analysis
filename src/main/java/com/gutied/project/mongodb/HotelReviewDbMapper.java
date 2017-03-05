@@ -13,7 +13,7 @@ public class HotelReviewDbMapper {
 
     public enum tripAdvisorReviewCollectionKeys {
         cityId, hotelId, reviewId, quote, review, reviewerOrigin, address, hotelName, city, rank, date, geolocation,
-        googleSentiment, entities, alchemyKeywords, alchemySentiment, azureSentiment, azureEntities
+        googleSentiment, googleEntities, alchemyKeywords, alchemySentiment, azureSentiment, azureEntities
     }
 
     public static BasicDBObject toDocument(TripadvisorReview hotelReview) {

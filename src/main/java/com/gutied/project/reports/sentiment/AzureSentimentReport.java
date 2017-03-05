@@ -1,4 +1,4 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.sentiment;
 
 
 import com.gutied.project.datasets.SentimentRange;
@@ -23,7 +23,7 @@ public class AzureSentimentReport extends AbstractSentimentReport {
 
     public static void main(String[] args) throws IOException {
         AzureSentimentReport quoteDataSet = new AzureSentimentReport();
-        quoteDataSet.createSentimentReport("Azure", "AzureSentiment.csv", azureSentiment.toString(), sentimentScore.toString(), null);
+        quoteDataSet.createSentimentReport("Azure", "AzureSentimentReport.csv", azureSentiment.toString(), sentimentScore.toString(), null);
     }
 
 }

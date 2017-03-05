@@ -34,4 +34,55 @@ public class ReportHelper {
             writeEntities(negativeEntitiesHistogram, writer, "negative");
         }
     }
-}
+
+
+    public static void writeResultsToFileOcurrences(String filename, SortedMap<String, Long> positiveEntitiesHistogram,
+                                          SortedMap<String, Long> negativeEntitiesHistogram) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename), StandardCharsets.UTF_16)) {
+            writer.write("Entity, positive, negative, difference\n");
+            positiveEntitiesHistogram.keySet().iterator().forEachRemaining(key -> {
+                Long positive = positiveEntitiesHistogram.get(key) == null ? 0l : positiveEntitiesHistogram.get(key);
+                Long negative = negativeEntitiesHistogram.get(key) == null ? 0l : negativeEntitiesHistogram.get(key);
+                long diff = positive - negative;
+                negativeEntitiesHistogram.remove(key);
+                try {
+                    writer.write(key + ", " + positive + ", " + negative + ", " + diff +  "\n");
+                    LOG.info("Writing {} with {} positives,  {} negatives and a difference of {}", key, positive, negative, diff);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            negativeEntitiesHistogram.keySet().iterator().forEachRemaining(key -> {
+                Long positive = positiveEntitiesHistogram.get(key) == null ? 0l : positiveEntitiesHistogram.get(key);
+                Long negative = negativeEntitiesHistogram.get(key) == null ? 0l : negativeEntitiesHistogram.get(key);
+                long diff = Math.abs(negative-positive);
+                try {
+                    writer.write(key + ", " + positive + ", " + negative + ", " + diff +  "\n");
+                    LOG.info("Writing {} with {} positives,  {} negatives and a difference of {}", key, positive, negative, diff);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
+
+    static public String[] normalizeEntities(String string) {
+        string = string.toLowerCase().trim();
+        string = string.replaceAll(",", " ");
+        string = string.replaceAll("\\.", " ");
+        string = string.replaceAll("-", " ");
+        string = string.replaceAll("/", " ");
+        string = string.replaceAll("!", " ");
+        string = string.replaceAll("\\+", " ");
+        string = string.replaceAll("\\(", " ");
+        string = string.replaceAll("\\)", " ");
+        string = string.replaceAll("\\)", " ");
+        string = string.replaceAll("\\*", " ");
+        string = string.replaceAll("&", " ");
+        string = string.replaceAll("£", " ");
+        string = string.replaceAll("$", " ");
+        string = string.replaceAll("‘", " ");
+        string = string.replaceAll("'", " ");
+        return string.split(" ");
+    }}

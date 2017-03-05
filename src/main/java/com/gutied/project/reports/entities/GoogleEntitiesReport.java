@@ -1,4 +1,4 @@
-package com.gutied.project.reports;
+package com.gutied.project.reports.entities;
 
 
 import com.gutied.project.datasets.OpinionRange;
@@ -6,6 +6,7 @@ import com.gutied.project.datasets.SentimentRange;
 import com.gutied.project.mongodb.GoogleLanguageDbMapper;
 import com.gutied.project.mongodb.HotelReviewDbMapper;
 import com.gutied.project.mongodb.MongoDB;
+import com.gutied.project.reports.ReportHelper;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static com.gutied.project.reports.ReportHelper.writeResultsToFile;
+import static com.gutied.project.reports.ReportHelper.writeResultsToFileOcurrences;
 
 public class GoogleEntitiesReport {
 
@@ -35,14 +36,14 @@ public class GoogleEntitiesReport {
         for (DBObject quote : quotes) {
             extractPositiveAndNegativeEntitiesForQuote(positiveEntitiesHistogram, negativeEntitiesHistogram, quote);
         }
-        writeResultsToFile(filename, positiveEntitiesHistogram, negativeEntitiesHistogram);
+        writeResultsToFileOcurrences(filename, positiveEntitiesHistogram, negativeEntitiesHistogram);
     }
 
     private void extractPositiveAndNegativeEntitiesForQuote(SortedMap<String, Long> entitiesHistogram,
                                                             SortedMap<String, Long> negativeEntitiesHistogram,
                                                             DBObject quote) {
         BasicDBList allEntities = (BasicDBList) quote.get(HotelReviewDbMapper.tripAdvisorReviewCollectionKeys
-                .entities.toString());
+                .googleEntities.toString());
         if (allEntities != null && allEntities.size() > 0) {
             DBObject googleSentimentObject = (DBObject) quote.get(HotelReviewDbMapper.tripAdvisorReviewCollectionKeys
                     .googleSentiment.toString());
@@ -53,7 +54,7 @@ public class GoogleEntitiesReport {
                         .toString());
                 if (Strings.isNotEmpty(entityName)) {
                     entityName = entityName.toLowerCase().trim();
-                    String[] words = entityName.split(" ");
+                    String[] words = ReportHelper.normalizeEntities(entityName);
                     for (String word : words) {
                         word = word.trim();
                         if (word.length() > 2) {
