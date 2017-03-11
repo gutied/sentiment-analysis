@@ -25,7 +25,7 @@ public class AlchemyEntitiesReport {
 
     private long[] counters;
 
-    public AlchemyEntitiesReport() {
+    private AlchemyEntitiesReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
@@ -60,12 +60,12 @@ public class AlchemyEntitiesReport {
                                 if (POSITIVE.name().equals(entitiesObject.get(IbmAlchemyDbMapper
                                         .KeywordCollectionKeys.sentiment.toString()))) {
                                     Long entityCounter = entitiesHistogram.get(word.trim());
-                                    entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                    entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                     entitiesHistogram.put(word.trim(), entityCounter);
                                 } else if (NEGATIVE.name().equals(entitiesObject.get(IbmAlchemyDbMapper
                                         .KeywordCollectionKeys.sentiment.toString()))) {
                                     Long entityCounter = negativeEntitiesHistogram.get(word.trim());
-                                    entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                    entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                     negativeEntitiesHistogram.put(word.trim(), entityCounter);
                                 }
                             }
@@ -78,7 +78,7 @@ public class AlchemyEntitiesReport {
 
     public static void main(String[] args) throws IOException {
         AlchemyEntitiesReport quoteDataSet = new AlchemyEntitiesReport();
-        quoteDataSet.createEntitiesReport("AlchemyEntities.csv");
+        quoteDataSet.createEntitiesReport("AlchemyEntitiesReport.csv");
     }
 
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * <p>The application stores the results in the database.
  * <p>
  * <p>In order to work the GOOGLE_API_KEY environment variable needs to be set with the a valid Google API key.
- * {@link https://developers.google.com/maps/documentation/geocoding/intro}
+ * {@see https://developers.google.com/maps/documentation/geocoding/intro}
  */
 public class Geocoding {
 
@@ -30,7 +30,7 @@ public class Geocoding {
         this(System.getenv("GOOGLE_API_KEY"));
     }
 
-    public Geocoding(String googleApiKey) {
+    Geocoding(String googleApiKey) {
         context = new GeoApiContext();
         context.setQueryRateLimit(3).setConnectTimeout(1, TimeUnit.SECONDS).setReadTimeout(1, TimeUnit.SECONDS)
                 .setWriteTimeout(1, TimeUnit.SECONDS).setApiKey(googleApiKey);
@@ -51,7 +51,7 @@ public class Geocoding {
                 LOG.warn("Several geocoding results received for address: {}", address);
             }
             if (results.length > 0) {
-                return results == null ? null : results[0];
+                return results[0];
             }
         } catch (Exception e) {
             LOG.error("Exception when invoking Google's Geocoding API", e);

@@ -7,9 +7,7 @@ import com.gutied.project.microsoft.json.SentimentRequestDocuments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Created by David on 19/02/2017.
- */
+
 public class AzureRequestHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(AzureRequestHelper.class);
@@ -25,6 +23,5 @@ public class AzureRequestHelper {
         }
         return json;
     }
-
 
 }

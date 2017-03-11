@@ -38,7 +38,7 @@ public class AzureEntitiesAnalysis extends AbstractEntitiesAnalysis {
     private ObjectMapper mapper;
     private String key = "";
 
-    public AzureEntitiesAnalysis() {
+    private AzureEntitiesAnalysis() {
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         httpClient = new HttpClient(new SslContextFactory());

@@ -41,8 +41,8 @@ public class ReportHelper {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename), StandardCharsets.UTF_16)) {
             writer.write("Entity, positive, negative, difference\n");
             positiveEntitiesHistogram.keySet().iterator().forEachRemaining(key -> {
-                Long positive = positiveEntitiesHistogram.get(key) == null ? 0l : positiveEntitiesHistogram.get(key);
-                Long negative = negativeEntitiesHistogram.get(key) == null ? 0l : negativeEntitiesHistogram.get(key);
+                Long positive = positiveEntitiesHistogram.get(key) == null ? 0L : positiveEntitiesHistogram.get(key);
+                Long negative = negativeEntitiesHistogram.get(key) == null ? 0L : negativeEntitiesHistogram.get(key);
                 long diff = positive - negative;
                 negativeEntitiesHistogram.remove(key);
                 try {
@@ -53,8 +53,8 @@ public class ReportHelper {
                 }
             });
             negativeEntitiesHistogram.keySet().iterator().forEachRemaining(key -> {
-                Long positive = positiveEntitiesHistogram.get(key) == null ? 0l : positiveEntitiesHistogram.get(key);
-                Long negative = negativeEntitiesHistogram.get(key) == null ? 0l : negativeEntitiesHistogram.get(key);
+                Long positive = positiveEntitiesHistogram.get(key) == null ? 0L : positiveEntitiesHistogram.get(key);
+                Long negative = negativeEntitiesHistogram.get(key) == null ? 0L : negativeEntitiesHistogram.get(key);
                 long diff = Math.abs(negative - positive);
                 try {
                     writer.write(key + ", " + positive + ", " + negative + ", " + diff + "\n");

@@ -1,6 +1,6 @@
 package com.gutied.project.microsoft.json;
 
-
+@SuppressWarnings("unused")
 public class SentimentRequest {
     private String language;
     private String id;

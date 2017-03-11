@@ -22,7 +22,7 @@ public class AlchemyEntitiesAnalysis extends AbstractEntitiesAnalysis {
 
     private AlchemyLanguage alchemyLanguage = new AlchemyLanguage();
 
-    public AlchemyEntitiesAnalysis() throws IOException {
+    private AlchemyEntitiesAnalysis() throws IOException {
         alchemyLanguage.setApiKey(System.getenv("ALCHEMY_API_KEY"));
     }
 

@@ -59,7 +59,7 @@ public abstract class AbstractSentimentAnalysis {
      * @param documentName        Name of the document where to store the sentiment analysis results.
      * @return {@link DBObject} with the  result data of the sentiment analysis call.
      */
-    protected DBObject getHotelReviewSentiment(DBObject hotelReviewDbObject, String documentName) {
+    private DBObject getHotelReviewSentiment(DBObject hotelReviewDbObject, String documentName) {
         String quoteString = (String) hotelReviewDbObject.get(quote.toString());
         if (Strings.isNotEmpty(quoteString)) {
             Object sentimentObject = hotelReviewDbObject.get(documentName);

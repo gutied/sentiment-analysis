@@ -2,7 +2,7 @@ package com.gutied.project.opinrank;
 
 import java.util.Date;
 
-public class OpinRankHotelReview {
+class OpinRankHotelReview {
     private String city;
     private String country;
     private String hotelName;
@@ -33,7 +33,7 @@ public class OpinRankHotelReview {
         this.city = city;
     }
 
-    public String getCountry() {
+    String getCountry() {
         return country;
     }
 

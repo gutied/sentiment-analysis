@@ -21,8 +21,8 @@ public class GoogleLanguageDbMapper {
      * <p>
      * <p>The fields saved are the name, salience, type and offset.
      *
-     * @param googleResponse
-     * @return
+     * @param googleResponse Object returned by Google entity extraction function.
+     * @return A document containing hte data of the entities extraction call.
      */
     public static List<DBObject> parseEntities(AnalyzeEntitiesResponse googleResponse) {
         List<DBObject> entities = new ArrayList<>();

@@ -26,7 +26,7 @@ public class AzureEntitiesReport {
 
     private long[] counters;
 
-    public AzureEntitiesReport() {
+    private AzureEntitiesReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
@@ -58,11 +58,11 @@ public class AzureEntitiesReport {
                         if (word.length() > 2) {
                             if (range == null || range.equals(SentimentRange.positive)) {
                                 Long entityCounter = entitiesHistogram.get(word.trim());
-                                entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                 entitiesHistogram.put(word.trim(), entityCounter);
                             } else {
                                 Long entityCounter = negativeEntitiesHistogram.get(word.trim());
-                                entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                 negativeEntitiesHistogram.put(word.trim(), entityCounter);
                             }
                         }
@@ -85,7 +85,7 @@ public class AzureEntitiesReport {
 
     public static void main(String[] args) throws IOException {
         AzureEntitiesReport quoteDataSet = new AzureEntitiesReport();
-        quoteDataSet.createEntitiesReport(args[0]);
+        quoteDataSet.createEntitiesReport("AzureEntitiesReport.csv");
     }
 
 }

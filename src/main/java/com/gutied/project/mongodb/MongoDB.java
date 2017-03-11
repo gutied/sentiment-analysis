@@ -19,10 +19,6 @@ public class MongoDB {
         mongo = new Mongo(MONGO_DB_SERVER, MONGO_DB_PORT);
     }
 
-    public static Mongo getMongo() {
-        return mongo;
-    }
-
     public static DB getProjectDB() {
         if (mongo == null) {
             init();

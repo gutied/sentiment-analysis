@@ -35,22 +35,22 @@ public class OpinRankDatasetParser {
         mongo = new Mongo(MONGO_DB_SERVER, MONGO_DB_PORT);
     }
 
-    public void process() {
+    private void process() {
         init();
-        Arrays.stream(listFolders(BASE_FOLDER)).forEach(cityName -> loadAllFilesInFolder(cityName));
+        Arrays.stream(listFolders(BASE_FOLDER)).forEach(this::loadAllFilesInFolder);
         DB db = mongo.getDB("reviews_test");
         DBCollection table = db.getCollection("opinRank");
-        allHotelReviews.stream().forEach(hotelReview -> table.insert(OpinRankHotelReviewMapper.toDocument
+        allHotelReviews.forEach(hotelReview -> table.insert(OpinRankHotelReviewMapper.toDocument
                 (hotelReview)));
 
     }
 
-    public String[] listFolders(String path) {
+    private String[] listFolders(String path) {
         File file = new File(path);
         return file.list((current, name) -> new File(current, name).isDirectory());
     }
 
-    public void loadAllFilesInFolder(String cityName) {
+    private void loadAllFilesInFolder(String cityName) {
         File foldersWithReviewsForCity = new File(BASE_FOLDER, cityName);
         String[] hotelReviews = foldersWithReviewsForCity.list();
         Arrays.stream(hotelReviews).forEach(hotelReviewsFileName -> loadAllReviewsFromFile(extractHotelCountry
@@ -63,7 +63,7 @@ public class OpinRankDatasetParser {
         String[] tokens = fileName.split("_");
         for (int i = 0; i < tokens.length; i++) {
             if (tokens[i].equals(city) || tokens[i].equals(cityWithSpacesInName)) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 for (int j = i + 1; j < tokens.length; j++) {
                     sb.append(tokens[j]).append(" ");
                 }
@@ -77,7 +77,7 @@ public class OpinRankDatasetParser {
         return fileName.split("_")[0];
     }
 
-    public void loadAllReviewsFromFile(String country, String cityName, String hotelName, File hotelReviewsFile) {
+    private void loadAllReviewsFromFile(String country, String cityName, String hotelName, File hotelReviewsFile) {
         logger.info(hotelReviewsFile.getAbsolutePath());
         try (Stream<String> stream = Files.lines(Paths.get(hotelReviewsFile.getAbsolutePath()))) {
             stream.forEach(reviewLine -> allHotelReviews.add(parseReview(country, cityName, hotelName, reviewLine)));
@@ -86,7 +86,7 @@ public class OpinRankDatasetParser {
         }
     }
 
-    public OpinRankHotelReview parseReview(String country, String cityName, String hotelName, String reviewLine) {
+    private OpinRankHotelReview parseReview(String country, String cityName, String hotelName, String reviewLine) {
         String[] spittedReviewLine = reviewLine.split(" ");
         String month = spittedReviewLine[0];
         String day = spittedReviewLine[1];

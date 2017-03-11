@@ -24,7 +24,7 @@ public class AlchemySentimentAnalysis extends AbstractSentimentAnalysis {
 
     private AlchemyLanguage alchemyLanguage = new AlchemyLanguage();
 
-    public AlchemySentimentAnalysis() throws IOException {
+    private AlchemySentimentAnalysis() throws IOException {
         MAX_API_CALLS_PER_DAY = 1000;
         alchemyLanguage.setApiKey(System.getenv("ALCHEMY_API_KEY"));
     }

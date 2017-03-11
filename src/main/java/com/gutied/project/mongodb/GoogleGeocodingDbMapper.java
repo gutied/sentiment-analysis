@@ -7,7 +7,7 @@ public class GoogleGeocodingDbMapper {
 
     public static final String geolocationCollection = "geocoding";
 
-    public enum geolocationCollectionKeys {hotelId, hotelName, address, lat, lng}
+    private enum geolocationCollectionKeys {hotelId, hotelName, address, lat, lng}
 
     public static BasicDBObject createHotelGeolocationObject(DBObject hotelReview, double lat, double lng) {
         BasicDBObject document = new BasicDBObject();

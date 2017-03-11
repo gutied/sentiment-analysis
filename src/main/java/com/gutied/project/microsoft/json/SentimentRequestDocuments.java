@@ -3,7 +3,7 @@ package com.gutied.project.microsoft.json;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@SuppressWarnings("unused")
 public class SentimentRequestDocuments {
 
     private List<SentimentRequest> documents;

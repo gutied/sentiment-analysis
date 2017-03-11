@@ -24,7 +24,7 @@ public class Opinions {
 
     private long[] counters;
 
-    public Opinions() {
+    private Opinions() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
@@ -37,7 +37,7 @@ public class Opinions {
 
         List<DBObject> allQuotes = hotelReviewCollection.find(new BasicDBObject(), projection).toArray();
 
-        allQuotes.stream().forEach(x -> {
+        allQuotes.forEach(x -> {
             LOG.info("{} - {}", x.get(rank.toString()), x.get(quote.toString()));
             counters[OpinionRange.getRange((Double) x.get(rank.toString())).ordinal()]++;
         });

@@ -24,7 +24,7 @@ public class GoogleEntitiesReport {
 
     private long[] counters;
 
-    public GoogleEntitiesReport() {
+    private GoogleEntitiesReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
@@ -60,11 +60,11 @@ public class GoogleEntitiesReport {
                         if (word.length() > 2) {
                             if (range == null || range.equals(SentimentRange.positive)) {
                                 Long entityCounter = entitiesHistogram.get(word.trim());
-                                entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                 entitiesHistogram.put(word.trim(), entityCounter);
                             } else {
                                 Long entityCounter = negativeEntitiesHistogram.get(word.trim());
-                                entityCounter = entityCounter == null ? new Long(1) : entityCounter + 1;
+                                entityCounter = entityCounter == null ? 1L : entityCounter + 1;
                                 negativeEntitiesHistogram.put(word.trim(), entityCounter);
                             }
                         }
@@ -88,7 +88,7 @@ public class GoogleEntitiesReport {
 
     public static void main(String[] args) throws IOException {
         GoogleEntitiesReport quoteDataSet = new GoogleEntitiesReport();
-        quoteDataSet.createEntitiesReport(args[0]);
+        quoteDataSet.createEntitiesReport("GoogleEntitiesReport.csv");
     }
 
 }

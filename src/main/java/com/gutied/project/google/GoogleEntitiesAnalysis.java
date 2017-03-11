@@ -37,7 +37,7 @@ public class GoogleEntitiesAnalysis extends AbstractEntitiesAnalysis {
 
     private final LanguageServiceClient languageApi;
 
-    public GoogleEntitiesAnalysis() throws IOException {
+    private GoogleEntitiesAnalysis() throws IOException {
         languageApi = LanguageServiceClient.create();
     }
 

@@ -2,6 +2,7 @@ package com.gutied.project.microsoft.json;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class EntitiesResponse {
 
     List<String> keyPhrases;

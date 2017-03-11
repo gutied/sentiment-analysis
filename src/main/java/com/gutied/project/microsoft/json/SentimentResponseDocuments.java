@@ -2,7 +2,7 @@ package com.gutied.project.microsoft.json;
 
 import java.util.List;
 
-
+@SuppressWarnings("unused")
 public class SentimentResponseDocuments {
 
     private List<SentimentResponse> documents;

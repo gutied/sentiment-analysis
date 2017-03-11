@@ -16,7 +16,7 @@ public class GeolocateHotels {
 
     private static Logger LOG = LoggerFactory.getLogger(TripadvisorHotelReviewReader.class);
 
-    public void geolocateAllHotelsAddressesAndSave() {
+    private void geolocateAllHotelsAddressesAndSave() {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection reviewCollection = mongoDb.getCollection(HotelReviewDbMapper.tripAdvisorReviewCollection);
         DBCollection geolocationCollection = mongoDb.getCollection(GoogleGeocodingDbMapper.geolocationCollection);

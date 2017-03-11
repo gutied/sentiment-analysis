@@ -31,7 +31,7 @@ public class GoogleSentimentAnalysis extends AbstractSentimentAnalysis {
 
     private final LanguageServiceClient languageApi;
 
-    protected GoogleSentimentAnalysis() throws IOException {
+    private GoogleSentimentAnalysis() throws IOException {
         languageApi = LanguageServiceClient.create();
     }
 

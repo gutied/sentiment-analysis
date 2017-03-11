@@ -35,7 +35,7 @@ public class AzureSentimentAnalysis extends AbstractSentimentAnalysis {
     private ObjectMapper mapper;
     private String key = "";
 
-    public AzureSentimentAnalysis() {
+    private AzureSentimentAnalysis() {
         MAX_API_CALLS_PER_DAY = 100;
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

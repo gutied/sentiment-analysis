@@ -8,12 +8,11 @@ import java.time.format.DateTimeFormatter;
 public class HotelReviewDbMapper {
 
     public static final String tripAdvisorReviewCollection = "tripadvisor_reviews";
-    public static final String mallorcaCollection = "reviews_mallorca";
 
     private static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public enum tripAdvisorReviewCollectionKeys {
-        cityId, hotelId, reviewId, quote, review, reviewerOrigin, address, hotelName, city, rank, date, geolocation,
+        cityId, hotelId, reviewId, quote, review, reviewerOrigin, address, hotelName, city, rank, date,
         googleSentiment, googleEntities, alchemyKeywords, alchemySentiment, azureSentiment, azureEntities
     }
 

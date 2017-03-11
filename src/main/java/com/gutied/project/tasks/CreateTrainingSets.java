@@ -26,8 +26,8 @@ public class CreateTrainingSets {
 
 
     private void createTrainingSets() throws IOException {
-        List<String> positiveQuotes = new ArrayList();
-        List<String> negativeQuotes = new ArrayList();
+        List<String> positiveQuotes = new ArrayList<>();
+        List<String> negativeQuotes = new ArrayList<>();
 
         DBObject query = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Adeje"));
         query.put(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Puerto de la Cruz"));
@@ -85,7 +85,7 @@ public class CreateTrainingSets {
 
     private void writeTrainigSetToDisk(List<String> positiveQuotes, String fileName) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(fileName), StandardCharsets.UTF_8)) {
-            positiveQuotes.stream().forEach((str) -> {
+            positiveQuotes.forEach((str) -> {
                 try {
                     writer.write(str);
                 } catch (IOException e) {

@@ -18,18 +18,18 @@ import java.util.List;
 
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
 
-abstract public class AbstractSentimentReport {
+abstract class AbstractSentimentReport {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractSentimentReport.class);
 
     private long[] counters;
 
-    public AbstractSentimentReport() {
+    AbstractSentimentReport() {
         counters = new long[OpinionRange.values().length];
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
 
-    protected void createSentimentReport(String provider, String filename, String sentimentDocument, String scoreDocument, String
+    void createSentimentReport(String provider, String filename, String sentimentDocument, String scoreDocument, String
             magnitudeDocument) throws IOException {
         long[] matches = new long[SentimentRange.values().length];
         long[] noMatches = new long[SentimentRange.values().length];
@@ -89,11 +89,11 @@ abstract public class AbstractSentimentReport {
     }
 
 
-    protected String createSentimentReportLine(boolean match, String comment, Double tripAdvisorRank, String reviewIdentifier,
-                                               SentimentRange providerSentimentType, SentimentRange tripadvisorSentimentType, DBObject
-                                                       providerSentimentObject, Double providerSentimentScore, Double
-                                                       providerSentimentMagnitude) {
-        StringBuffer sb = new StringBuffer();
+    private String createSentimentReportLine(boolean match, String comment, Double tripAdvisorRank, String reviewIdentifier,
+                                             SentimentRange providerSentimentType, SentimentRange tripadvisorSentimentType, DBObject
+                                                     providerSentimentObject, Double providerSentimentScore, Double
+                                                     providerSentimentMagnitude) {
+        StringBuilder sb = new StringBuilder();
         sb.append(reviewIdentifier).append(", ");
         sb.append(comment.replaceAll(",", "").replaceAll("“", "").replaceAll("”", "")).append(", ");
         sb.append(tripAdvisorRank).append(", ");
