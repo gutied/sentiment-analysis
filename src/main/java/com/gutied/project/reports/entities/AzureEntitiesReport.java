@@ -21,7 +21,6 @@ import static com.gutied.project.mongodb.AzureDbMapper.AzureEntitiesCollectionKe
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.azureEntities;
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.azureSentiment;
 import static com.gutied.project.reports.ReportHelper.writeResultsToFile;
-import static com.gutied.project.reports.ReportHelper.writeResultsToFileOcurrences;
 
 public class AzureEntitiesReport {
 
@@ -72,7 +71,6 @@ public class AzureEntitiesReport {
             }
         }
     }
-
 
     private SentimentRange getAzureSentimentRange(DBObject googleSentimentObject) {
         SentimentRange range = null;

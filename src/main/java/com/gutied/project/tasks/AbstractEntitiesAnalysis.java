@@ -1,7 +1,6 @@
 package com.gutied.project.tasks;
 
 
-import com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys;
 import com.gutied.project.mongodb.MongoDB;
 import com.mongodb.*;
 import org.apache.logging.log4j.util.Strings;
@@ -28,7 +27,7 @@ public abstract class AbstractEntitiesAnalysis {
      * {@code findAndSaveEntitiesForAllReviewsInCity} finds all TripAdvisor reviews in the db, invokes an entity
      * extraction function for the review and stores the result in the specified collection.
      *
-     * @param cityName         The city for which reviews analyze.
+     * @param cityName     The city for which reviews analyze.
      * @param documentName Name of the document where to store the sentiment analysis results.
      */
     protected void findAndSaveEntitiesForAllReviewsInCity(String cityName, String documentName) {

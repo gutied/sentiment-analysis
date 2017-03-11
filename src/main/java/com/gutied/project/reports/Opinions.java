@@ -29,7 +29,7 @@ public class Opinions {
         Arrays.stream(OpinionRange.values()).forEach(x -> counters[x.ordinal()] = 0);
     }
 
-    private void writeOpinionsToFile(String filename) {
+    private void writeOpinionsToFile() {
         DB mongoDb = MongoDB.getProjectDB();
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
         DBObject projection = new BasicDBObject(quote.toString(), 1);
@@ -47,7 +47,7 @@ public class Opinions {
 
     public static void main(String[] args) throws IOException {
         Opinions quoteDataSet = new Opinions();
-        quoteDataSet.writeOpinionsToFile(args[0]);
+        quoteDataSet.writeOpinionsToFile();
     }
 
 }

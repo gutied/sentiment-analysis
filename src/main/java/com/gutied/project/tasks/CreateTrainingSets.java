@@ -29,19 +29,15 @@ public class CreateTrainingSets {
         List<String> positiveQuotes = new ArrayList();
         List<String> negativeQuotes = new ArrayList();
 
+        DBObject query = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Adeje"));
+        query.put(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Puerto de la Cruz"));
 
-        DBObject clause1 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Adeje"));
-        DBObject clause2 = new BasicDBObject(tripAdvisorReviewCollectionKeys.city.toString(), new BasicDBObject("$ne", "Puerto de la Cruz"));
-        BasicDBList or = new BasicDBList();
-        or.add(clause1);
-        or.add(clause2);
-        DBObject query = new BasicDBObject("$and", or);
         DBObject projection = new BasicDBObject(quote.toString(), 1);
         projection.put(rank.toString(), 1);
         projection.put(quote.toString(), 1);
 
         DBCursor quotesCursor = MongoDB.getProjectDB().getCollection(tripAdvisorReviewCollection).find(query, projection);
-        for (DBObject quoteObject  : quotesCursor ) {
+        for (DBObject quoteObject : quotesCursor) {
             String quote = (String) quoteObject.get(tripAdvisorReviewCollectionKeys.quote.toString());
             Double rank = (Double) quoteObject.get(tripAdvisorReviewCollectionKeys.rank.toString());
             if (Strings.isNotEmpty(quote) && rank != null && (rank == 1 || rank == 5)) {
@@ -67,10 +63,9 @@ public class CreateTrainingSets {
         BasicDBList or = new BasicDBList();
         or.add(clause1);
         or.add(clause2);
-        DBObject query = new BasicDBObject("$or", or);
 
         DBCursor quotesCursor = MongoDB.getAllQuotes();
-        for (DBObject quoteObject  : quotesCursor ) {
+        for (DBObject quoteObject : quotesCursor) {
             String quote = (String) quoteObject.get(tripAdvisorReviewCollectionKeys.quote.toString());
             Double rank = (Double) quoteObject.get(tripAdvisorReviewCollectionKeys.rank.toString());
             if (Strings.isNotEmpty(quote) && rank != null) {
@@ -126,6 +121,7 @@ public class CreateTrainingSets {
     public static void main(String[] args) throws IOException {
         CreateTrainingSets createDataSets = new CreateTrainingSets();
         createDataSets.createTrainingSets();
+        createDataSets.createEvaluationSets();
     }
 
 }

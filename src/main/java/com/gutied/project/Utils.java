@@ -6,11 +6,6 @@ import java.util.List;
 
 public class Utils {
 
-    public static List<String> listFolders(String path) {
-        File file = new File(path);
-        return listFolders(file);
-    }
-
     public static List<String> listFolders(File file) {
         return Arrays.asList(file.list((current, name) -> new File(current, name).isDirectory()));
     }

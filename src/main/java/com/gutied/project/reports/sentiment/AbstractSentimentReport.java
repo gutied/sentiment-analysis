@@ -65,8 +65,13 @@ abstract public class AbstractSentimentReport {
                     } else {
                         noMatches[tripadvisorSentimentType.ordinal()]++;
                         match = false;
-                        LOG.info("No match Tripadvisor: {} {} " + provider + " {} {} - {}", tripadvisorSentimentType.name(),
-                                tripAdvisorRank, providerSentimentType.name(), providerSentimentScore, comment);
+                        try {
+
+                            LOG.info("No match Tripadvisor: {} {} " + provider + " {} {} - {}", tripadvisorSentimentType.name(),
+                                    tripAdvisorRank, providerSentimentType.name(), providerSentimentScore, comment);
+                        } catch (Exception e) {
+                            System.out.println("Wow");
+                        }
                     }
                 } else {
                     objectsWhereSentimentAnalysisWasNotConclusive++;
@@ -82,8 +87,6 @@ abstract public class AbstractSentimentReport {
         LOG.info("Quotes where sentiment Analysis was not conclusive {}", objectsWhereSentimentAnalysisWasNotConclusive);
 
     }
-
-
 
 
     protected String createSentimentReportLine(boolean match, String comment, Double tripAdvisorRank, String reviewIdentifier,
@@ -115,6 +118,5 @@ abstract public class AbstractSentimentReport {
     abstract protected boolean containsSentimentEntry(DBObject providerSentimentObject);
 
     abstract protected SentimentRange getSentimentRange(Double providerSentimentScore);
-
 
 }

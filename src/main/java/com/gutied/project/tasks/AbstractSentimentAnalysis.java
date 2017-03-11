@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollection;
 import static com.gutied.project.mongodb.HotelReviewDbMapper.tripAdvisorReviewCollectionKeys.*;
-import static java.util.regex.Pattern.compile;
 
 public abstract class AbstractSentimentAnalysis {
 
@@ -31,7 +30,6 @@ public abstract class AbstractSentimentAnalysis {
         DBCollection hotelReviewCollection = mongoDb.getCollection(tripAdvisorReviewCollection);
         DBObject queryObject = new BasicDBObject(documentName, new BasicDBObject("$exists", false));
         queryObject.put(city.toString(), cityName);
-      //  queryObject.put(date.toString(), compile("2016"));
         DBCursor cursor = hotelReviewCollection.find(queryObject).addOption(Bytes.QUERYOPTION_NOTIMEOUT);
 
         for (DBObject hotelReviewDbObject : cursor) {

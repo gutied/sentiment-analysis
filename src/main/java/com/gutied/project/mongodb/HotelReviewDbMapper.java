@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 public class HotelReviewDbMapper {
 
     public static final String tripAdvisorReviewCollection = "tripadvisor_reviews";
+    public static final String mallorcaCollection = "reviews_mallorca";
 
     private static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMdd");
 

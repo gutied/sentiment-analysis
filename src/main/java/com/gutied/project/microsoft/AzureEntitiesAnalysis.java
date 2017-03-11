@@ -99,8 +99,8 @@ public class AzureEntitiesAnalysis extends AbstractEntitiesAnalysis {
     }
 
     public static void main(String[] args) throws IOException {
-            AzureEntitiesAnalysis sentimentExtraction = new AzureEntitiesAnalysis();
-            sentimentExtraction.findAndSaveEntitiesForAllReviewsInCity("Puerto de la Cruz", azureEntities.toString());
+        AzureEntitiesAnalysis sentimentExtraction = new AzureEntitiesAnalysis();
+        sentimentExtraction.findAndSaveEntitiesForAllReviewsInCity("Puerto de la Cruz", azureEntities.toString());
     }
 
 }

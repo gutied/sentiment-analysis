@@ -24,7 +24,7 @@ public class OpinRankDatasetParser {
     private static Logger logger = LoggerFactory.getLogger(OpinRankDatasetParser.class);
 
     private static final String MONGO_DB_SERVER = "localhost";
-    private static final String BASE_FOLDER = "D:\\Users\\david\\Project\\datasets\\OpinRankDataset\\hotels";
+    private static final String BASE_FOLDER = ".\\";
     private static final Integer MONGO_DB_PORT = 27017;
 
     private static List<OpinRankHotelReview> allHotelReviews = new LinkedList<>();
@@ -32,9 +32,7 @@ public class OpinRankDatasetParser {
     private Mongo mongo;
 
     private void init() {
-
         mongo = new Mongo(MONGO_DB_SERVER, MONGO_DB_PORT);
-
     }
 
     public void process() {
@@ -46,7 +44,6 @@ public class OpinRankDatasetParser {
                 (hotelReview)));
 
     }
-
 
     public String[] listFolders(String path) {
         File file = new File(path);
@@ -111,9 +108,7 @@ public class OpinRankDatasetParser {
     public static void main(String... args) {
         OpinRankDatasetParser opinRankDatasetLoader = new OpinRankDatasetParser();
         opinRankDatasetLoader.process();
-
-
-        System.out.println("Total reviews created: " + allHotelReviews.size());
+        logger.info("Total reviews created: " + allHotelReviews.size());
     }
 
 }

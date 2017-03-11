@@ -35,8 +35,6 @@ public class AlchemyEntitiesAnalysis extends AbstractEntitiesAnalysis {
             return IbmAlchemyDbMapper.parseKeywords(keywords);
         } catch (Exception e) {
             LOG.error("Exception on call to Google API [{}]", e.getMessage());
-//            List<DBObject> errorResponse = new ArrayList<>(1);
-//            errorResponse.add(new BasicDBObject("error", e.getMessage()));
             return null;
         }
     }

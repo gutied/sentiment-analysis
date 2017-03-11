@@ -76,8 +76,6 @@ public class AlchemyEntitiesReport {
         }
     }
 
-
-
     public static void main(String[] args) throws IOException {
         AlchemyEntitiesReport quoteDataSet = new AlchemyEntitiesReport();
         quoteDataSet.createEntitiesReport("AlchemyEntities.csv");

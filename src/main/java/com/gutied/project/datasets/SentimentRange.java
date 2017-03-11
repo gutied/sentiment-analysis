@@ -4,8 +4,8 @@ import com.google.common.collect.Range;
 
 public enum SentimentRange {
 
-    negative(Range.closed(0d, 2.5d), Range.closed(-1d, 0d), Range.closed(0d, 0.5d), Range.closed(0d, 0.5d)),
-    positive(Range.openClosed(2.5d, 5d), Range.openClosed (0d, 1d), Range.openClosed (0.5d, 1d), Range.openClosed(0d, 0.5d));
+    negative(Range.closed(0d, 2.5d), Range.closed(-1d, 0d), Range.closed(0d, 0.5d), Range.closed(-1d, 0d)),
+    positive(Range.openClosed(2.5d, 5d), Range.openClosed(0d, 1d), Range.openClosed(0.5d, 1d), Range.openClosed(0d, 1d));
 
     private Range<Double> tripAdvisorRange;
     private Range<Double> googleRange;
@@ -59,16 +59,8 @@ public enum SentimentRange {
         return tripAdvisorRange;
     }
 
-    public void setTripAdvisorRange(Range<Double> tripAdvisorRange) {
-        this.tripAdvisorRange = tripAdvisorRange;
-    }
-
     public Range<Double> getGoogleRange() {
         return googleRange;
-    }
-
-    public void setGoogleRange(Range<Double> googleRange) {
-        this.googleRange = googleRange;
     }
 
     public Range<Double> getAzureRange() {
@@ -78,4 +70,5 @@ public enum SentimentRange {
     public Range<Double> getAlchemyRange() {
         return alchemyRange;
     }
+
 }

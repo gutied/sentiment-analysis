@@ -26,7 +26,7 @@ public class GoogleSentimentReport extends AbstractSentimentReport {
 
     public static void main(String[] args) throws IOException {
         GoogleSentimentReport quoteDataSet = new GoogleSentimentReport();
-        quoteDataSet.createSentimentReport("Google", "GoogleSentiment.csv", googleSentiment.toString(), magnitude.toString(), magnitude
+        quoteDataSet.createSentimentReport("Google", "GoogleSentimentReport.csv", googleSentiment.toString(), score.toString(), magnitude
                 .toString());
     }
 

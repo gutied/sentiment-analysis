@@ -3,7 +3,6 @@ package com.gutied.project.datasets;
 public enum OpinionRange {
 
     negative(0, 2.5), positive(2.5, 5);
-//    negative(0, 2), neutral(2, 3), positive(3, 6);
 
     private double min;
     private double max;
@@ -21,6 +20,5 @@ public enum OpinionRange {
         }
         return null;
     }
-
 
 }
